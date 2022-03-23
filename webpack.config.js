@@ -1,9 +1,11 @@
+// eslint-disable-next-line
 const path = require('path');
 
+// eslint-disable-next-line
 module.exports = {
     mode: 'development',
     devtool: 'inline-source-map',
-  entry: path.resolve(__dirname, './index.js'),
+  entry: path.resolve(__dirname, './index.js'), // eslint-disable-line
   module: {
     rules: [
       {
@@ -18,10 +20,10 @@ module.exports = {
   },
   output: {
     filename: '[name].js',
-     path: path.resolve(__dirname, 'dist'),
+     path: path.resolve(__dirname, 'dist'), // eslint-disable-line
      clean: true
   },
   devServer: {
-    static: path.resolve(__dirname, 'dist'),
+    static: path.resolve(__dirname, 'dist'), // eslint-disable-line
   },
 };
