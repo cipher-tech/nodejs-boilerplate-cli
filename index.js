@@ -1,24 +1,26 @@
-import express from "express";
-import webpack from "webpack"; // eslint-disable-line
-import webpackDevMiddleware from 'webpack-dev-middleware'; // eslint-disable-line
 import "dotenv/config";
-import config from "./webpack.config.cjs";
+import express from "express";
+
+import cors from "cors";
 
 const app = express();
-const compiler = webpack(config);
 
 const port = process.env.PORT || 3333;
 
-app.use(
-    webpackDevMiddleware(compiler, {
-        publicPath: config.output.publicPath
-    })
-);
+// enable cors
+app.use(cors());
+app.options("*", cors());
+
+// parse json request
+app.use(express.json());
+
+// parse urlencoded request
+app.use(express.urlencoded({ extended: true }));
 
 app.get("/", (req, res) => {
-    res.send("Hello World!");
+    res.send("Server running");
 });
 
 app.listen(port, () => {
-    console.log(`Example app listening on port ${port}`); // eslint-disable-line
+    console.log(`Server is listening on port ${port}`);
 });
