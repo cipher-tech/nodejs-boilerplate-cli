@@ -1,7 +1,8 @@
 import "dotenv/config";
 import express from "express";
-
 import cors from "cors";
+import config from "./config";
+import expressConfig from "./config/express";
 
 const app = express();
 
@@ -21,6 +22,8 @@ app.get("/", (req, res) => {
     res.send("Server running");
 });
 
+expressConfig(app);
 app.listen(port, () => {
     console.log(`Server is listening on port ${port}`);
+    console.log(`Server is config`, config);
 });
