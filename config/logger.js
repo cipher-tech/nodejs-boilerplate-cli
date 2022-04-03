@@ -4,17 +4,23 @@ import Papertrail from "winston-papertrail"; // https://github.com/guzru/winston
 import constants from ".";
 
 const { DOMAIN = "" } = constants;
-
+const { combine, timestamp, label, printf, splat, simple } = format;
 const logger = (env) => {
     let ret;
 
+    const loggerFormat = printf(({ level, message, label, timestamp }) => (
+        `${timestamp} [${label}] ${level}: ${message}`
+    ));
     switch (env) {
         case "development":
             if (DOMAIN.includes("localhost")) {
                 ret = winston.createLogger({
-                    format: format.combine(
-                        format.splat(),
-                        format.simple()
+                    format: combine(
+                        splat(),
+                        simple(),
+                        timestamp(),
+                        label({ label: env }),
+                        loggerFormat
                     ),
                     transports: [
                         new winston.transports.Console({
@@ -37,9 +43,12 @@ const logger = (env) => {
                 });
             } else {
                 ret = winston.createLogger({
-                    format: format.combine(
-                        format.splat(),
-                        format.simple()
+                    format: combine(
+                        timestamp(),
+                        splat(),
+                        timestamp(),
+                        label({ label: env }),
+                        simple()
                     ),
                     transports: [
                         new winston.transports.Console({
@@ -68,9 +77,12 @@ const logger = (env) => {
             break;
         case "test":
             ret = winston.createLogger({
-                format: format.combine(
-                    format.splat(),
-                    format.simple()
+                format: combine(
+                    timestamp(),
+                    splat(),
+                    timestamp(),
+                    label({ label: env }),
+                    simple()
                 ),
                 transports: [
                     new winston.transports.File({
@@ -88,9 +100,12 @@ const logger = (env) => {
             break;
         default:
             ret = winston.createLogger({
-                format: format.combine(
-                    format.splat(),
-                    format.simple()
+                format: combine(
+                    timestamp(),
+                    splat(),
+                    timestamp(),
+                    label({ label: env }),
+                    simple()
                 ),
                 transports: [
                     new winston.transports.Console({

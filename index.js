@@ -22,7 +22,7 @@ app.get("/", (req, res) => {
     res.send("Server running");
 });
 
-expressConfig(app);
+expressConfig.run(app);
 app.listen(port, () => {
     console.log(`Server is listening on port ${port}`);
     console.log(`Server is config`, config);
