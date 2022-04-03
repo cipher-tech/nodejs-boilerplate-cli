@@ -19,6 +19,10 @@ class ExpressConfig {
             logger = loggerInit("development");
         } else if (app.get("env") === "test") {
             logger = loggerInit("test");
+        } else if (app.get("env") === "staging") {
+            logger = loggerInit("staging");
+        } else if (app.get("env") === "production") {
+            logger = loggerInit("production");
         } else {
             logger = loggerInit();
         }

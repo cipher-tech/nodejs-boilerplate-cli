@@ -5,9 +5,9 @@ import constants from ".";
 
 const { DOMAIN = "" } = constants;
 const { combine, timestamp, label, printf, splat, simple } = format;
+
 const logger = (env) => {
     let ret;
-
     const loggerFormat = printf(({ level, message, label, timestamp }) => (
         `${timestamp} [${label}] ${level}: ${message}`
     ));
@@ -44,11 +44,11 @@ const logger = (env) => {
             } else {
                 ret = winston.createLogger({
                     format: combine(
-                        timestamp(),
                         splat(),
+                        simple(),
                         timestamp(),
                         label({ label: env }),
-                        simple()
+                        loggerFormat
                     ),
                     transports: [
                         new winston.transports.Console({
@@ -67,8 +67,8 @@ const logger = (env) => {
                             colorize: false
                         }),
                         new winston.transports.Papertrail({
-                            host: `${process.env.PAPERTRAIL_URL}`.split("\r")[0],
-                            port: process.env.PAPERTRAIL_PORT
+                            host: `${constants.PAPERTRAIL_URL}`.split("\r")[0],
+                            port: constants.PAPERTRAIL_PORT
                         })
                     ],
                     exitOnError: false
@@ -78,11 +78,11 @@ const logger = (env) => {
         case "test":
             ret = winston.createLogger({
                 format: combine(
-                    timestamp(),
                     splat(),
+                    simple(),
                     timestamp(),
                     label({ label: env }),
-                    simple()
+                    loggerFormat
                 ),
                 transports: [
                     new winston.transports.File({
@@ -98,14 +98,76 @@ const logger = (env) => {
                 exitOnError: false
             });
             break;
+        case "staging":
+            ret = winston.createLogger({
+                format: combine(
+                    splat(),
+                    simple(),
+                    timestamp(),
+                    label({ label: env }),
+                    loggerFormat
+                ),
+                transports: [
+                    new winston.transports.File({
+                        level: "info",
+                        filename: "./server.log",
+                        handleExceptions: true,
+                        json: false,
+                        maxsize: 5242880,
+                        maxFiles: 50,
+                        colorize: false
+                    }),
+                    new winston.transports.Papertrail({
+                        host: `${constants.PAPERTRAIL_URL}`.split("\r")[0],
+                        port: constants.PAPERTRAIL_PORT,
+                        app_name: `${constants.NODE_ENV}-api`
+                    })
+                ],
+                exitOnError: false
+            });
+            break;
+        case "production":
+            ret = winston.createLogger({
+                format: combine(
+                    splat(),
+                    simple(),
+                    timestamp(),
+                    label({ label: env }),
+                    loggerFormat
+                ),
+                transports: [
+                    new winston.transports.Console({
+                        level: "error",
+                        handleExceptions: true,
+                        json: false,
+                        colorize: true
+                    }),
+                    new winston.transports.File({
+                        level: "info",
+                        filename: "./server.log",
+                        handleExceptions: true,
+                        json: false,
+                        maxsize: 5242880,
+                        maxFiles: 100,
+                        colorize: true
+                    }),
+                    new winston.transports.Papertrail({
+                        host: `${constants.PAPERTRAIL_URL}`.split("\r")[0],
+                        port: constants.PAPERTRAIL_PORT,
+                        app_name: `${constants.NODE_ENV}-api`
+                    })
+                ],
+                exitOnError: false
+            });
+            break;
         default:
             ret = winston.createLogger({
                 format: combine(
-                    timestamp(),
                     splat(),
+                    simple(),
                     timestamp(),
                     label({ label: env }),
-                    simple()
+                    loggerFormat
                 ),
                 transports: [
                     new winston.transports.Console({
@@ -120,7 +182,7 @@ const logger = (env) => {
     }
 
     ret.stream = {
-        write: (message, encoding) => {
+        write: (message) => {
             logger.info(message);
         }
     };
