@@ -10,11 +10,11 @@ const defaults = {
     serviceName: "Node Boilerplate API"
 };
 
-const environment = {
+const config = {
     development: Object.assign(development, defaults),
     test: Object.assign(test, defaults),
     staging: Object.assign(staging, defaults),
     production: Object.assign(production, defaults)
 }[process.env.NODE_ENV || "development"];
 
-export default environment;
+export default config;

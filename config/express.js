@@ -15,6 +15,7 @@ class ExpressConfig {
         let accessLogStream;
         let logger;
 
+        // initialize logger with the right for the right environment
         if (app.get("env") === "development") {
             logger = loggerInit("development");
         } else if (app.get("env") === "test") {
@@ -27,6 +28,7 @@ class ExpressConfig {
             logger = loggerInit();
         }
 
+        // makes logger a global variable so you don't have to import it in your file to use it.
         global.logger = logger;
         logger.info("Application starting...");
         logger.debug("Overriding Express logger");
@@ -52,4 +54,5 @@ class ExpressConfig {
     }
 }
 
+// creates a singleton pattern so only one instance of the class exists
 export default new ExpressConfig();
