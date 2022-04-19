@@ -3,6 +3,7 @@ const development = {
     DOMAIN: process.env.DOMAIN,
     JWT_SECRET: process.env.JWT_SECRET,
     PAPERTRAIL_URL: process.env.PAPERTRAIL_URL,
+    PORT: process.env.PORT,
     PAPERTRAIL_PORT: process.env.PAPERTRAIL_PORT,
     ENVIRONMENT: "development"
 };

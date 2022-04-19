@@ -1,26 +1,12 @@
-import "dotenv/config";
+import dotenv from "dotenv";
 import express from "express";
-import cors from "cors";
 import config from "./config";
 import expressConfig from "./config/express";
 
+dotenv.config();
 const app = express();
 
-const port = process.env.PORT || 3333;
-
-// enable cors
-app.use(cors());
-app.options("*", cors());
-
-// parse json request
-app.use(express.json());
-
-// parse urlencoded request
-app.use(express.urlencoded({ extended: true }));
-
-app.get("/", (req, res) => {
-    res.send("Server running");
-});
+const port = config.PORT || 3333;
 
 // calls the express configuration on the app
 expressConfig.run(app);
