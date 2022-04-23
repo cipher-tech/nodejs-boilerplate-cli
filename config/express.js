@@ -7,11 +7,13 @@ import cors from "cors";
 
 import loggerInit from "./logger";
 import Response from "../app/utils/responseHandler";
-import ApiError from "../app/exceptions/apiError";
 
 class ExpressConfig {
     constructor() {
+        // instantiates the logger
         this.logger = null;
+
+        // Sets our log directory and creates the directory if it doesn't exist.
         this.logDirectory = "./log";
         this.checkLogDir = fs.existsSync(this.logDirectory) || fs.mkdirSync(this.logDirectory);
     }
@@ -19,7 +21,7 @@ class ExpressConfig {
     configureLogger(app) {
         let accessLogStream;
 
-        // initialize logger with the right for the right environment
+        // initialize logger for the right environment
         if (app.get("env") === "development") {
             this.logger = loggerInit("development");
         } else if (app.get("env") === "test") {
@@ -37,6 +39,7 @@ class ExpressConfig {
         logger.info("Application starting...");
         logger.debug("Overriding Express logger");
 
+        // checks if the log directory exists and starts streaming logs to the file
         if (this.checkLogDir) {
             accessLogStream = FileStreamRotator.getStream({
                 date_format: "YYYYMMDD",
@@ -45,7 +48,6 @@ class ExpressConfig {
                 verbose: false
             });
         }
-
         app.use(morgan("combined", { stream: accessLogStream }));
     }
 
@@ -62,6 +64,7 @@ class ExpressConfig {
 
         app.get("/", (req, res) => {
             const response = new Response(req, res);
+
             response.success({
                 message: "OKAY",
                 data: []
@@ -71,12 +74,16 @@ class ExpressConfig {
         // format Unhandled errors
         app.use((err, req, res, next) => {
             const response = new Response(req, res);
+
+            // Calls the error formatter to format the errors that were not handled by the app.
             response.errorFormatter(err, req, res, next);
         });
 
-        // handle errors
+        // handle all error instances and returns a response errors
         app.use((err, req, res, next) => {
-            this.logger.error("An error occured: ", err);
+            // console.log(err);
+            this.logger.error("An error occurred");
+            this.logger.error(err.stack);
             res.status(err.status || 500)
                 .json({
                     message: err.message,

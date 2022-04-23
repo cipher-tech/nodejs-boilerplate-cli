@@ -1,6 +1,8 @@
 class ErrorObject extends Error {
-    constructor(status, message, type = "", url = "", stack = null) {
+    constructor(options) {
+        const { status, message, type = "", url = "", stack = null } = options;
         super(message);
+
         this.message = message;
         this.status = status;
         this.url = url;

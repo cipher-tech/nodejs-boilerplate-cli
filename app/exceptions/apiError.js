@@ -8,12 +8,17 @@ class ApiError {
         this.url = "";
     }
 
-    badRequest(message, url) {
+    badRequest(message, url = "") {
         this.url = url;
         this.message = message;
         this.type = "Bad Request";
         this.status = 400;
-        const error = new ErrorObject(this.status, this.message, this.type, this.url);
+        const error = new ErrorObject({
+            status: this.status,
+            message: this.message,
+            type: this.type,
+            url: this.url
+        });
         throw error;
     }
 }
