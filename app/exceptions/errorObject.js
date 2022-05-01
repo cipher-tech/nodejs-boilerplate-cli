@@ -1,3 +1,9 @@
+/**
+ * Applications Error object class
+ * Used to format all error messages
+ *
+ * @returns {object} ErrorObject class
+ */
 class ErrorObject extends Error {
     constructor(options) {
         const { status, message, type = "", url = "", stack = null } = options;

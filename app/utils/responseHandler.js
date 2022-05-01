@@ -2,6 +2,14 @@ import config from "../../config";
 import ApiError from "../exceptions/apiError";
 import ErrorHandler from "../exceptions/errorObject";
 
+/**
+ * Applications response handler class
+ * Handles both success and error responses using well defined methods
+ * @param {object} req express request object
+ * @param {object} res express response object
+ *
+ * @returns {object} response
+ */
 class Response {
     constructor(req, res) {
         this.domain = config.DOMAIN;
@@ -12,6 +20,12 @@ class Response {
         this.currentUrl = `${this.domain}${this.request.originalUrl}`;
     }
 
+    /**
+     * Method to Handles success responses to ensure consistency
+     * @param {object} options - {message, data}
+     *
+     * @returns {object} - success response
+     */
     success(options) {
         if (Object.entries(options).length === 0) { return new Error("Error: Object (data) is required!"); }
         const { message, data } = options;
@@ -28,6 +42,15 @@ class Response {
         return this.response.status(200).json(response);
     }
 
+    /**
+     * Method for formatting error responses to ensure consistency
+     * @param {object} err error object
+     * @param {object} req express request object
+     * @param {object} res express response object
+     * @param {function} next express function to pass on to the next middleware
+     *
+     * @returns {function} next()
+     */
     errorFormatter(err, req, res, next) {
         let error = err;
 
@@ -47,6 +70,10 @@ class Response {
         next(error);
     }
 
+    /**
+    * Custom Method to return bad request status(400) response to the client
+    * @param {string} message the message to return to the client on error
+    */
     badRequest(message) {
         this.apiError.badRequest(message, this.currentUrl);
     }

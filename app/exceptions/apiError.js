@@ -1,5 +1,11 @@
 import ErrorObject from "./errorObject";
 
+/**
+ * Applications Error handler class
+ * contains error responses
+ *
+ * @returns {object} ApiError class
+ */
 class ApiError {
     constructor() {
         this.message = "Internal Server Error";
@@ -8,6 +14,11 @@ class ApiError {
         this.url = "";
     }
 
+    /**
+   * Method to return bad request status(400) response to the client
+   * @param {string} message the message to return to the client on error
+   * @returns {object} Error object
+   */
     badRequest(message, url = "") {
         this.url = url;
         this.message = message;

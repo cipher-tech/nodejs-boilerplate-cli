@@ -31,4 +31,4 @@ module.exports = {
             bigNumberStrings: true
         }
     }
-}
+};

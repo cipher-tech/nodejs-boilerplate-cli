@@ -1,4 +1,5 @@
 const development = {
+    API_VERSION: process.env.API_VERSION,
     DATABASE_URL: process.env.DATABASE_URL,
     DOMAIN: process.env.DOMAIN,
     JWT_SECRET: process.env.JWT_SECRET,

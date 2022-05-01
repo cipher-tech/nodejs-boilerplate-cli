@@ -7,7 +7,14 @@ import cors from "cors";
 
 import loggerInit from "./logger";
 import Response from "../app/utils/responseHandler";
+import Router from "../routes";
+import config from ".";
 
+/**
+ * Class contains Express configurations
+ *
+ * @returns Express config
+ */
 class ExpressConfig {
     constructor() {
         // instantiates the logger
@@ -16,8 +23,14 @@ class ExpressConfig {
         // Sets our log directory and creates the directory if it doesn't exist.
         this.logDirectory = "./log";
         this.checkLogDir = fs.existsSync(this.logDirectory) || fs.mkdirSync(this.logDirectory);
+
+        this.router = new Router();
     }
 
+    /**
+     * Method to configure application logger
+     * @param {object} app - express app
+     */
     configureLogger(app) {
         let accessLogStream;
 
@@ -51,6 +64,10 @@ class ExpressConfig {
         app.use(morgan("combined", { stream: accessLogStream }));
     }
 
+    /**
+     * Method to configure application middleware
+     * @param {object} app - express app
+     */
     configureRoutes(app) {
         // enable cors
         app.use(cors());
@@ -62,14 +79,7 @@ class ExpressConfig {
         // parse urlencoded request
         app.use(express.urlencoded({ extended: true }));
 
-        app.get("/", (req, res) => {
-            const response = new Response(req, res);
-
-            response.success({
-                message: "OKAY",
-                data: []
-            });
-        });
+        app.use(`/api/${config.API_VERSION}`, this.router.run());
 
         // format Unhandled errors
         app.use((err, req, res, next) => {
@@ -94,6 +104,10 @@ class ExpressConfig {
         });
     }
 
+    /**
+     * Main Method that bootstraps and calls all the configuration methods
+     * @param {object} app - express app
+     */
     run(app) {
         this.configureLogger(app);
         this.configureRoutes(app);
