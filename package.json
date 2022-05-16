@@ -61,5 +61,8 @@
     "sequelize": "^6.17.0",
     "winston": "^3.6.0",
     "winston-papertrail": "^1.0.5"
-  }
+  },
+  "browserslist": [
+    "last 2 Chrome versions"
+  ]
 }

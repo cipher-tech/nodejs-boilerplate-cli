@@ -91,7 +91,6 @@ class ExpressConfig {
 
         // handle all error instances and returns a response errors
         app.use((err, req, res, next) => {
-            // console.log(err);
             this.logger.error("An error occurred");
             this.logger.error(err.stack);
             res.status(err.status || 500)

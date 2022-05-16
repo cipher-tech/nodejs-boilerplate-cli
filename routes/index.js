@@ -1,5 +1,6 @@
 import express from "express";
 import Response from "../app/utils/responseHandler";
+import AuthRoute from "./authRoute";
 
 /**
  * Main Router that contains Application routes
@@ -9,11 +10,13 @@ import Response from "../app/utils/responseHandler";
 class Router {
     constructor() {
         this.router = express.Router();
+
+        this.authRoute = new AuthRoute(this.router);
         this.response = null;
     }
 
     indexRoute() {
-        return this.router.get("/", (req, res) => {
+        this.router.get("/", (req, res) => {
             this.response = new Response(req, res);
             this.response.success({
                 message: "Welcome.",
