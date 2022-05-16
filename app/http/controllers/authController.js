@@ -25,7 +25,6 @@ class AuthController {
      * @returns {object} response
      */
     register = async (req, res) => {
-        this.message = "this is a message";
         this.response = new Response(req, res);
         return this.response.success({
             message: "this is a message",

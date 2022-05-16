@@ -1,3 +1,4 @@
+import { ValidationError } from "joi";
 import config from "../../config";
 import ApiError from "../exceptions/apiError";
 import ErrorHandler from "../exceptions/errorObject";
@@ -53,17 +54,23 @@ class Response {
      */
     errorFormatter(err, req, res, next) {
         let error = err;
-
         if (!(error instanceof ErrorHandler)) {
-            const status = error.status ? 400 : 500;
-            const message = error.status === 400 ? "Bad Request" : "Internal Server Error";
-            const type = error.status === 400 ? "Bad Request" : "Internal Server Error";
+            let status = error.status ? 400 : 500;
+            let message = error.status === 400 ? "Bad Request" : "Internal Server Error";
+            let type = error.status === 400 ? "Bad Request" : "Internal Server Error";
 
+            // check if error is from Joi validation package and set properties accordingly
+            if (error instanceof ValidationError) {
+                const { details } = error;
+                status = 400;
+                message = details[0].message;
+                type = "Validation error";
+            }
             error = new ErrorHandler({
                 status,
                 message,
                 type,
-                currentUrl: this.currentUrl,
+                url: this.currentUrl,
                 stack: error.stack
             });
         }

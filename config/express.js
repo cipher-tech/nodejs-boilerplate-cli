@@ -79,6 +79,7 @@ class ExpressConfig {
         // parse urlencoded request
         app.use(express.urlencoded({ extended: true }));
 
+        // configures our default routes path
         app.use(`/api/${config.API_VERSION}`, this.router.run());
 
         // format Unhandled errors
@@ -89,7 +90,7 @@ class ExpressConfig {
             response.errorFormatter(err, req, res, next);
         });
 
-        // handle all error instances and returns a response errors
+        // handle all error instances and returns an errors response
         app.use((err, req, res, next) => {
             this.logger.error("An error occurred");
             this.logger.error(err.stack);
@@ -108,8 +109,13 @@ class ExpressConfig {
      * @param {object} app - express app
      */
     run(app) {
+        // calls the method to configure our logger
         this.configureLogger(app);
+
+        // calls the method to configure our routes
         this.configureRoutes(app);
+
+        // configure route for file upload
         app.use(fileUpload({
             limits: { fileSize: 10 * 1024 * 1024 } // 10 MB
         }));

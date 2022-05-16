@@ -10,9 +10,12 @@ import AuthRoute from "./authRoute";
 class Router {
     constructor() {
         this.router = express.Router();
-
-        this.authRoute = new AuthRoute(this.router);
         this.response = null;
+
+        /*  instantiates the class where we define our authentication routes
+        *   and adds the authentication routes defined in the class to our routes
+         */
+        this.authRoute = new AuthRoute(this.router);
     }
 
     indexRoute() {
