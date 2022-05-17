@@ -9,7 +9,7 @@ const { combine, timestamp, label, printf, splat, simple } = format;
 const logger = (env) => {
     let ret;
     const loggerFormat = printf(({ level, message, label, timestamp }) => (
-        `${timestamp} [${label}] ${level}: ${message}`
+        `${new Date(timestamp).toGMTString()} [${label}] [${level}] id-${correlationId}: ${message}`
     ));
     switch (env) {
         case "development":
