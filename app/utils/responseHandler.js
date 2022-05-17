@@ -56,7 +56,7 @@ class Response {
         let error = err;
         if (!(error instanceof ErrorHandler)) {
             let status = error.status ? 400 : 500;
-            let message = error.status === 400 ? "Bad Request" : "Internal Server Error";
+            let message = error.message ? error.message : "Internal Server Error";
             let type = error.status === 400 ? "Bad Request" : "Internal Server Error";
 
             // check if error is from Joi validation package and set properties accordingly

@@ -9,6 +9,7 @@ import loggerInit from "./logger";
 import Response from "../app/utils/responseHandler";
 import Router from "../routes";
 import config from ".";
+import RandomNumberHelper from "../app/utils/randomNumberHelper";
 
 /**
  * Class contains Express configurations
@@ -19,6 +20,12 @@ class ExpressConfig {
     constructor() {
         // instantiates the logger
         this.logger = null;
+
+        // Generate a correlationId from RandomNumberHelper class for grouping logs
+        this.correlationId = new RandomNumberHelper();
+
+        // Make correlationId a global variable
+        global.correlationId = this.correlationId.getConsistentRandomNumber;
 
         // Sets our log directory and creates the directory if it doesn't exist.
         this.logDirectory = "./log";
@@ -93,7 +100,15 @@ class ExpressConfig {
         // handle all error instances and returns an errors response
         app.use((err, req, res, next) => {
             this.logger.error("An error occurred");
-            this.logger.error(err.stack);
+            logger.error(`
+            status - ${err.status}
+            message - ${err.message} 
+            url - ${req.originalUrl} 
+            method - ${req.method} 
+            IP - ${req.ip}
+            Error Stack - ${err.stack}
+          `);
+
             res.status(err.status || 500)
                 .json({
                     message: err.message,
@@ -101,6 +116,7 @@ class ExpressConfig {
                     url: err.url,
                     type: err.type
                 });
+            // throw new Error(err);
         });
     }
 

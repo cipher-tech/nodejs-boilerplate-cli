@@ -9,7 +9,6 @@ class AuthValidator {
             lastName: Joi.string().min(3).required(),
             email: Joi.string().min(3).required()
         });
-
         const { error, value } = schema.validate(body);
         if (error) {
             next(error);
