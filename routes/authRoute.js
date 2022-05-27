@@ -1,4 +1,4 @@
-import AuthController from "../app/http/controllers/authController";
+import { AuthController } from "../app/http/controllers";
 import AuthValidator from "../app/http/validator/authValidator";
 
 /**

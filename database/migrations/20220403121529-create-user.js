@@ -5,7 +5,7 @@ module.exports = {
         id INTEGER PRIMARY KEY,
         name VARCHAR(60) NOT NULL,
         phone_number VARCHAR(11) NOT NULL,
-        age INTEGER NOT NULL DEFAULT 12,
+        age INTEGER NOT NULL DEFAULT 18,
         date_of_birth TIMESTAMP null
     );
     `);

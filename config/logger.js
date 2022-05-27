@@ -1,5 +1,4 @@
 import winston, { format } from "winston";
-import Papertrail from "winston-papertrail"; // https://github.com/guzru/winston-sentry#readme
 
 import constants from ".";
 
