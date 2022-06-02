@@ -1,3 +1,4 @@
+import { UserAuthenticationService } from "../../services/authService";
 import Response from "../../utils/responseHandler";
 
 /**
@@ -13,10 +14,6 @@ import Response from "../../utils/responseHandler";
  */
 
 class AuthController {
-    constructor() {
-        this.response = null;
-    }
-
     /**
      * Method that handles user registration
      * @param {object} req express request object
@@ -24,12 +21,23 @@ class AuthController {
      *
      * @returns {object} response
      */
-    register = async (req, res) => {
-        this.response = new Response(req, res);
-        return this.response.success({
-            message: "this is a message",
-            data: []
-        });
+    register = async (req, res, next) => {
+        const { body } = req;
+        const response = new Response(req, res);
+
+        try {
+            const userAuthService = new UserAuthenticationService();
+            const registerService = await userAuthService.registerService(body);
+            if (registerService) {
+                response.success({
+                    message: "this is a message",
+                    data: []
+                });
+            }
+        } catch (error) {
+            logger.error("Error: Error while registering user in authController.js", error);
+            next(error);
+        }
     };
 }
 

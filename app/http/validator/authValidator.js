@@ -8,7 +8,8 @@ class AuthValidator {
         const schema = Joi.object({
             firstName: Joi.string().min(3).required(),
             lastName: Joi.string().min(3).required(),
-            email: Joi.string().min(3).required()
+            email: Joi.string().min(3).required(),
+            password: Joi.string().min(8).required()
         });
         const { error, value } = schema.validate(body);
         if (error) {

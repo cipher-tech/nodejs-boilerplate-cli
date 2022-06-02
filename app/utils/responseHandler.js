@@ -1,7 +1,6 @@
 import { ValidationError } from "joi";
 import config from "../../config";
 import ApiError from "../exceptions/apiError";
-import ErrorHandler from "../exceptions/errorObject";
 
 /**
  * Applications response handler class
@@ -18,7 +17,6 @@ class Response {
         this.request = req;
         this.response = res;
         this.apiError = ApiError;
-        this.currentUrl = `${this.domain}${this.request.originalUrl}`;
     }
 
     /**
@@ -54,7 +52,7 @@ class Response {
      */
     errorFormatter(err, req, res, next) {
         let error = err;
-        if (!(error instanceof ErrorHandler)) {
+        if (!(error instanceof ApiError)) {
             let status = error.status ? 400 : 500;
             let message = error.message ? error.message : "Internal Server Error";
             let type = error.status === 400 ? "Bad Request" : "Internal Server Error";
@@ -66,11 +64,10 @@ class Response {
                 message = details[0].message;
                 type = "Validation error";
             }
-            error = new ErrorHandler({
+            error = new ApiError({
                 status,
                 message,
                 type,
-                url: this.currentUrl,
                 stack: error.stack
             });
         }

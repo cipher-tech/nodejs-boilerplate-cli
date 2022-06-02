@@ -1,30 +1,64 @@
-import ErrorObject from "./errorObject";
-
+import {
+    StatusCodes,
+    getReasonPhrase
+} from "http-status-codes";
 /**
- * Applications Error handler class
- * contains error responses
+ * @description Applications Error object class
+ * Used to format all error messages
  *
- * @returns {object} ApiError class
+ * @returns  {object} ApiError class
  */
-class ApiError {
-    constructor() {
-        this.message = "Internal Server Error";
-        this.status = 500;
-        this.type = "Internal Server Error";
-        this.url = "";
+class ApiError extends Error {
+    constructor(...options) {
+        const argumentLength = options.length;
+        console.log(options[0]);
+
+        if ((argumentLength === 1) && (typeof options === "object")) {
+            console.log("::::::::::::::::;In ONE1111:::::::::::::::", options);
+
+            const { status, message, type = "", stack = null } = options[0];
+            super(message);
+            this.message = message;
+            this.status = status || StatusCodes.INTERNAL_SERVER_ERROR;
+            this.type = type || getReasonPhrase(500);
+            if (stack) {
+                this.stack = stack;
+            } else {
+                this.stack = Error.captureStackTrace(this, this.constructor);
+            }
+        } else if ((argumentLength > 1) && (typeof options[0] === "number") && (typeof options[1] === "string")) {
+            console.log("::::::::::::::::;In TWO 2222:::::::::::::::", options[0]);
+            console.log(options[1]);
+
+            const status = options[0] || StatusCodes.INTERNAL_SERVER_ERROR;
+            const message = options[1] || getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR);
+            const originalError = options[2];
+
+            super(message);
+            this.message = message;
+            this.status = status;
+            this.type = getReasonPhrase(this.status);
+            if (originalError) {
+                this.stack = options[2].stack;
+            } else {
+                this.stack = Error.captureStackTrace(this, this.constructor);
+            }
+        } else {
+            console.log("::::::::::::::::;In THREE:::::::::::::::");
+            super(getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR));
+            this.message = getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR);
+            this.status = StatusCodes.INTERNAL_SERVER_ERROR;
+            this.type = getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR);
+            this.stack = Error.captureStackTrace(this, this.constructor);
+        }
     }
 
-    /**
-   * Method to return bad request status(400) response to the client
-   * @param {string} message the message to return to the client on error
-   * @returns {object} Error object
-   */
     badRequest(message, url = "") {
         this.url = url;
         this.message = message;
-        this.type = "Bad Request";
-        this.status = 400;
-        const error = new ErrorObject({
+        this.type = getReasonPhrase(StatusCodes.BAD_REQUEST);
+        this.status = StatusCodes.BAD_REQUEST;
+        const error = new ApiError({
             status: this.status,
             message: this.message,
             type: this.type,
@@ -34,4 +68,4 @@ class ApiError {
     }
 }
 
-export default new ApiError();
+export default ApiError;

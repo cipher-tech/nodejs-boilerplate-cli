@@ -1,4 +1,5 @@
 // const process.env = require("../process.env");
+// run source .env before running "npx sequelize-cli db:migrate" to set environment variables.
 
 module.exports = {
     development: {

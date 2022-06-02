@@ -1,6 +1,6 @@
 import express from "express";
 import Response from "../app/utils/responseHandler";
-import AuthRoute from "./authRoute";
+import AuthRoute from "./v1/authRoute";
 
 /**
  * Main Router that contains Application routes

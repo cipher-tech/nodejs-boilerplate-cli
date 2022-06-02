@@ -92,14 +92,13 @@ class ExpressConfig {
         // format Unhandled errors
         app.use((err, req, res, next) => {
             const response = new Response(req, res);
-
             // Calls the error formatter to format the errors that were not handled by the app.
             response.errorFormatter(err, req, res, next);
         });
 
         // handle all error instances and returns an errors response
+        // eslint-disable-next-line no-unused-vars
         app.use((err, req, res, next) => {
-            this.logger.error("An error occurred");
             logger.error(`
             status - ${err.status}
             message - ${err.message} 
@@ -113,7 +112,7 @@ class ExpressConfig {
                 .json({
                     message: err.message,
                     status: err.status,
-                    url: err.url,
+                    url: req.originalUrl,
                     type: err.type
                 });
             // throw new Error(err);

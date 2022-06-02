@@ -1,5 +1,5 @@
-import { AuthController } from "../app/http/controllers";
-import AuthValidator from "../app/http/validator/authValidator";
+import { AuthController } from "../../app/http/controllers";
+import AuthValidator from "../../app/http/validator/authValidator";
 
 /**
  * AuthRoute contains authentication routes
