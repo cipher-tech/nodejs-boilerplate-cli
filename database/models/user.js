@@ -1,17 +1,16 @@
-const { Model } = require("sequelize");
-
-module.exports = (sequelize, DataTypes) => {
-    class User extends Model {
-        /**
-         * Helper method for defining associations.
-         * This method is not a part of Sequelize lifecycle.
-         * The `models/index` file will call this method automatically.
-         */
-        static associate(models) {
-            // define association here
-        }
-    }
-    User.init(
+export default (sequelize, DataTypes) => {
+    //     class User extends sequelize {
+    //         /**
+    //          * Helper method for defining associations.
+    //          * This method is not a part of Sequelize lifecycle.
+    //          * The `models/index` file will call this method automatically.
+    //          */
+    //         static associate(models) {
+    //             // define association here
+    //         }
+    //     }
+    const User = sequelize.define(
+        "user",
         {
             id: {
                 type: DataTypes.INTEGER,
@@ -28,6 +27,10 @@ module.exports = (sequelize, DataTypes) => {
             },
             phone_number: {
                 type: DataTypes.STRING(11),
+                allowNull: false
+            },
+            password: {
+                type: DataTypes.STRING(),
                 allowNull: false
             },
             age: {
@@ -49,9 +52,13 @@ module.exports = (sequelize, DataTypes) => {
         {
             sequelize,
             timestamps: true,
+            // I want updatedAt to actually be called updateTimestamp
+            updatedAt: "updated_at",
+
+            // I want createdAt to actually be called updateTimestamp
+            createdAt: "created_at",
             modelName: "User"
         }
     );
-    User.sync({ alter: true });
     return User;
 };

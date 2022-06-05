@@ -6,10 +6,12 @@ class AuthValidator {
         logger.info("Validating incoming request body in registerValidator method of AuthValidator class in authValidator.js");
         const { body } = req;
         const schema = Joi.object({
-            firstName: Joi.string().min(3).required(),
-            lastName: Joi.string().min(3).required(),
+            name: Joi.string().min(3).required(),
             email: Joi.string().min(3).required(),
-            password: Joi.string().min(8).required()
+            age: Joi.number().integer().max(300).required(),
+            password: Joi.string().min(8).required(),
+            phone_number: Joi.string().min(11).max(14),
+            date_of_birth: Joi.date()
         });
         const { error, value } = schema.validate(body);
         if (error) {

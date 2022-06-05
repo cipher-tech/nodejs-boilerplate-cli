@@ -16,6 +16,8 @@ class Router {
         *   and adds the authentication routes defined in the class to our routes
          */
         this.authRoute = new AuthRoute(this.router);
+
+        this.indexRoute();
     }
 
     indexRoute() {
@@ -29,8 +31,6 @@ class Router {
     }
 
     run() {
-        this.indexRoute();
-
         return this.router;
     }
 }

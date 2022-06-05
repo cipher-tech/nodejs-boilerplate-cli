@@ -7,7 +7,13 @@ const development = {
     PAPERTRAIL_URL: process.env.PAPERTRAIL_URL,
     PORT: process.env.PORT,
     PAPERTRAIL_PORT: process.env.PAPERTRAIL_PORT,
-    ENVIRONMENT: "development"
+    ENVIRONMENT: "development",
+    USERNAME: process.env.USERNAME,
+    PASSWORD: process.env.PASSWORD,
+    DATABASE: process.env.DATABASE,
+    HOST: process.env.HOST,
+    DATABASE_PORT: process.env.DATABASE_PORT,
+    DIALECT: process.env.DIALECT
 };
 
 export default development;

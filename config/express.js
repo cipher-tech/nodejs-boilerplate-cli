@@ -10,6 +10,7 @@ import Response from "../app/utils/responseHandler";
 import Router from "../routes";
 import config from ".";
 import RandomNumberHelper from "../app/utils/randomNumberHelper";
+import db from "../database";
 
 /**
  * Class contains Express configurations
@@ -119,11 +120,16 @@ class ExpressConfig {
         });
     }
 
+    configureDatabase() {
+        return db.sequelize.sync();
+    }
+
     /**
      * Main Method that bootstraps and calls all the configuration methods
      * @param {object} app - express app
      */
     run(app) {
+        this.configureDatabase();
         // calls the method to configure our logger
         this.configureLogger(app);
 
