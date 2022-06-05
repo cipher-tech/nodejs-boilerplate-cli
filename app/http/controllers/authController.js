@@ -30,7 +30,7 @@ class AuthController {
             const registerService = await userAuthService.registerService(body);
             if (registerService) {
                 response.success({
-                    message: "this is a message",
+                    message: "Registration successful",
                     data: registerService
                 });
             } else {
