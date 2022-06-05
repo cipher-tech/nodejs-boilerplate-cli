@@ -1,15 +1,17 @@
 import {
     StatusCodes
 } from "http-status-codes";
-import database from "../../../database";
-import User from "../../../database/models/user";
 import ApiError from "../../exceptions/apiError";
 import { HashText } from "../../utils";
+import UserService from "../userService";
 
-class UserAuthService {
+class AuthService {
+    constructor() {
+        this.UserService = new UserService();
+    }
+
     registerService = async (body) => {
         try {
-            console.log(":::::::::;dbdbdbdbdbdb::::::::::::", database.User);
             const {
                 password,
                 email,
@@ -17,13 +19,13 @@ class UserAuthService {
                 phone_number: phoneNumber,
                 age,
                 date_of_birth: dateOfBirth } = body;
+
             logger.info("Hashing password. UserAuthService::registerService in userAuthService.js");
             const hashedPassword = await HashText.getHash(password);
-            logger.info("Finish hashing password in UserAuthService::registerService. userAuthService.js");
+            logger.info("Finish hashing password in UserAuthService::registerService in userAuthService.js");
 
             logger.info(`Checking if user with email: ${email} exists. UserAuthService::registerService in userAuthService.js`);
-            const oldUser = await database.User.findOne({ where: { email } });
-            console.log("::::::::;oldUser::::::::", oldUser);
+            const oldUser = await this.UserService.getUserByEmail(email);
 
             if (oldUser !== null) {
                 logger.error(`user with email: ${email} already exists. UserAuthService::registerService in userAuthService.js`);
@@ -32,8 +34,7 @@ class UserAuthService {
             logger.info(`User with email: ${email} does not exist. UserAuthService::registerService in userAuthService.js`);
 
             logger.info(`Creating user with email: ${email}. UserAuthService::registerService in userAuthService.js`);
-            const dbUser = database.User;
-            const newUser = await dbUser.create({
+            const newUser = await this.UserService.storeUser({
                 name,
                 email,
                 phone_number: phoneNumber,
@@ -43,7 +44,7 @@ class UserAuthService {
             });
             logger.info(`Successfully created user with email: ${email}. UserAuthService::registerService in userAuthService.js`);
 
-            console.log("::::::::;newUser::::::::", newUser);
+            
             return newUser;
         } catch (error) {
             const { message, status, type, stack } = error;
@@ -59,4 +60,4 @@ class UserAuthService {
     };
 }
 
-export default UserAuthService;
+export default AuthService;

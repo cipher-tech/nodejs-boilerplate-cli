@@ -31,7 +31,6 @@
 
 // export default db;
 
-
 import Sequelize from "sequelize";
 import config from "../../config/index";
 import User from "./user";
@@ -49,11 +48,6 @@ const sequelize = new Sequelize(config.DATABASE, config.USERNAME, config.PASSWOR
     }
 });
 
-console.log({
-    db: config.DATABASE,
-    us: config.USERNAME,
-    pass: config.PASSWORD
-});
 const database = {};
 
 database.Sequelize = Sequelize;

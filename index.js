@@ -8,7 +8,7 @@ const app = express();
 
 // Sets the port the app will run on from environment variable or a default port 4400
 const port = config.PORT || 4400;
-console.log(config);
+
 // calls the express configuration method with express app as argument
 expressConfig.run(app);
 

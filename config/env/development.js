@@ -13,7 +13,8 @@ const development = {
     DATABASE: process.env.DATABASE,
     HOST: process.env.HOST,
     DATABASE_PORT: process.env.DATABASE_PORT,
-    DIALECT: process.env.DIALECT
+    DIALECT: process.env.DIALECT,
+    JWT_TIME_TO_LIVE: process.env.JWT_TIME_TO_LIVE
 };
 
 export default development;

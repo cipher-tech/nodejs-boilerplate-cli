@@ -1,4 +1,4 @@
 /* eslint-disable import/prefer-default-export */
-import UserAuthService from "./userAuthService";
+import AuthService from "./authService";
 
-export const UserAuthenticationService = UserAuthService;
+export const UserAuthenticationService = AuthService;
