@@ -6,7 +6,6 @@ class HashText {
         try {
             logger.info("INFO: Attempting to hash text in hashText.js");
             const salt = Number(config.SALT_ROUNDS);
-            console.log(salt);
             const hashedTest = await bcrypt.hash(text, salt);
 
             logger.info("INFO: Text successfully hashed in hashText.js");

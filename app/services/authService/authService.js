@@ -3,6 +3,7 @@ import {
 } from "http-status-codes";
 import ApiError from "../../exceptions/apiError";
 import { HashText } from "../../utils";
+import TokenService from "../tokenService";
 import UserService from "../userService";
 
 class AuthService {
@@ -26,7 +27,6 @@ class AuthService {
 
             logger.info(`Checking if user with email: ${email} exists. UserAuthService::registerService in userAuthService.js`);
             const oldUser = await this.UserService.getUserByEmail(email);
-
             if (oldUser !== null) {
                 logger.error(`user with email: ${email} already exists. UserAuthService::registerService in userAuthService.js`);
                 throw new ApiError(StatusCodes.CONFLICT, "User with email already exists");
@@ -44,8 +44,12 @@ class AuthService {
             });
             logger.info(`Successfully created user with email: ${email}. UserAuthService::registerService in userAuthService.js`);
 
-            
-            return newUser;
+            logger.info(`Generating token for: ${email}. UserAuthService::registerService in userAuthService.js`);
+            const tokenService = new TokenService();
+            const token = await tokenService.generateAuthToken(newUser);
+            logger.info(`Successfully generated token for: ${email}. UserAuthService::registerService in userAuthService.js`);
+
+            return { newUser, token };
         } catch (error) {
             const { message, status, type, stack } = error;
             logger.error("ERROR: error occurred while attempting to register user in userAuthService.js", error);

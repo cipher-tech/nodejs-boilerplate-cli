@@ -11,11 +11,8 @@ import {
 class ApiError extends Error {
     constructor(...options) {
         const argumentLength = options.length;
-        console.log(options[0]);
 
         if ((argumentLength === 1) && (typeof options === "object")) {
-            console.log("::::::::::::::::;In ONE1111:::::::::::::::", options);
-
             const { status, message, type = "", stack = null } = options[0];
             super(message);
             this.message = message;
@@ -27,9 +24,6 @@ class ApiError extends Error {
                 this.stack = Error.captureStackTrace(this, this.constructor);
             }
         } else if ((argumentLength > 1) && (typeof options[0] === "number") && (typeof options[1] === "string")) {
-            console.log("::::::::::::::::;In TWO 2222:::::::::::::::", options[0]);
-            console.log(options[1]);
-
             const status = options[0] || StatusCodes.INTERNAL_SERVER_ERROR;
             const message = options[1] || getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR);
             const originalError = options[2];
@@ -44,7 +38,6 @@ class ApiError extends Error {
                 this.stack = Error.captureStackTrace(this, this.constructor);
             }
         } else {
-            console.log("::::::::::::::::;In THREE:::::::::::::::");
             super(getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR));
             this.message = getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR);
             this.status = StatusCodes.INTERNAL_SERVER_ERROR;

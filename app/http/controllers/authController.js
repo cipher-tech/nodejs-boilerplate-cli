@@ -31,8 +31,10 @@ class AuthController {
             if (registerService) {
                 response.success({
                     message: "this is a message",
-                    data: []
+                    data: registerService
                 });
+            } else {
+                throw new Error("An error occurred, we're looking into it.");
             }
         } catch (error) {
             logger.error("Error: Error while registering user in authController.js", error);
