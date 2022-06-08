@@ -18,6 +18,7 @@ class AuthController {
      * Method that handles user registration
      * @param {object} req express request object
      * @param {object} res express response object
+     * @param {function} next express response object
      *
      * @returns {object} response
      */
@@ -37,10 +38,21 @@ class AuthController {
                 throw new Error("An error occurred, we're looking into it.");
             }
         } catch (error) {
-            logger.error("Error: Error while registering user in authController.js", error);
+            logger.error("Error: Error while registering user in authController.js", error.code);
             next(error);
         }
     };
+
+    login = async (req, res, next) => {
+        const { body } = req;
+        const response = new Response(req, res);
+        try {
+            fdf
+            logger.info("attempting to log user. :::AuthController::login in authController.js");
+        } catch (error) {
+            next(error);
+        }
+    }
 }
 
 export default AuthController;

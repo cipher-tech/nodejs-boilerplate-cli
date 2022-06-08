@@ -1,4 +1,5 @@
 import { AuthController } from "../../app/http/controllers";
+import AuthMiddleware from "../../app/http/middleware";
 import AuthValidator from "../../app/http/validator/authValidator";
 
 /**
@@ -16,7 +17,7 @@ class AuthRoute {
         this.router = router;
         this.authValidator = new AuthValidator();
         this.authController = new AuthController();
-
+        this.authMiddleware = new AuthMiddleware();
         this.routes();
     }
 
@@ -29,6 +30,12 @@ class AuthRoute {
             "/register",
             this.authValidator.registerValidator,
             this.authController.register
+        );
+        this.router.post(
+            "/login",
+            this.authValidator.registerValidator,
+            this.authMiddleware.userAuth,
+            this.authController.login
         );
     }
 }

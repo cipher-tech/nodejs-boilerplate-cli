@@ -11,6 +11,7 @@ import Router from "../routes";
 import config from ".";
 import RandomNumberHelper from "../app/utils/randomNumberHelper";
 import db from "../database";
+import ApiError from "../app/exceptions/apiError";
 
 /**
  * Class contains Express configurations
@@ -33,6 +34,7 @@ class ExpressConfig {
         this.checkLogDir = fs.existsSync(this.logDirectory) || fs.mkdirSync(this.logDirectory);
 
         this.router = new Router();
+        this.ApiError = new ApiError();
     }
 
     /**
@@ -90,34 +92,12 @@ class ExpressConfig {
         // configures our default routes path
         app.use(`/api/${config.API_VERSION}`, this.router.run());
 
-        // format Unhandled errors
-        app.use((err, req, res, next) => {
-            const response = new Response(req, res);
-            // Calls the error formatter to format the errors that were not handled by the app.
-            response.errorFormatter(err, req, res, next);
-        });
+        // Handles exceptions thrown in the application
+        app.use(this.ApiError.appError);
 
         // handle all error instances and returns an errors response
         // eslint-disable-next-line no-unused-vars
-        app.use((err, req, res, next) => {
-            logger.error(`
-            status - ${err.status}
-            message - ${err.message} 
-            url - ${req.originalUrl} 
-            method - ${req.method} 
-            IP - ${req.ip}
-            Error Stack - ${err.stack}
-          `);
-
-            res.status(err.status || 500)
-                .json({
-                    message: err.message,
-                    status: err.status,
-                    url: req.originalUrl,
-                    type: err.type
-                });
-            // throw new Error(err);
-        });
+        app.use(this.ApiError.genericError);
     }
 
     configureDatabase() {

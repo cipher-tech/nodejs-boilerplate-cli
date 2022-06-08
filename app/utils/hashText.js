@@ -15,6 +15,25 @@ class HashText {
             throw new Error("An error occurred please try again or contact support.");
         }
     }
+
+    /**
+    * Verify token and return token doc (or throw an error if it is not valid)
+    * @param {string} text
+    * @returns {Promise<boolean>}
+    */
+    static async verifyHash(text, hashedText) {
+        try {
+            logger.info("INFO: Attempting to verify text in hashText.js");
+            const hashedTest = await bcrypt.compare(text, hashedText);
+
+            console.log("::::::::::hashedTesthashedTesthashedTest:::::::::::", hashedTest);
+            logger.info("INFO: Text successfully verified in hashText.js");
+            return hashedTest;
+        } catch (error) {
+            logger.error("ERROR: error occurred while hashing text in hashText.js", error);
+            throw new Error("An error occurred please try again or contact support.");
+        }
+    }
 }
 
 export default HashText;

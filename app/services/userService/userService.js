@@ -15,6 +15,16 @@ class UserService {
         }
     }
 
+    async getUserById(id) {
+        try {
+            const user = await this.User.findByPk(id);
+            return user;
+        } catch (error) {
+            logger.error("ERROR: An error occurred while retrieving user", error);
+            throw new Error("An error occurred while. we're looking into it.");
+        }
+    }
+
     async storeUser(userDetails) {
         try {
             const newUser = await this.User.create({ ...userDetails });

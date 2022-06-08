@@ -23,6 +23,24 @@ class AuthValidator {
             next();
         }
     }
+
+    loginValidator(req, res, next) {
+        logger.info("Validating incoming request body in. AuthValidator::loginValidator in authValidator.js");
+        const { body } = req;
+        const schema = Joi.object({
+            email: Joi.string().email().min(3).required(),
+            password: Joi.string().min(8).required()
+        });
+        const { error, value } = schema.validate(body);
+        if (error) {
+            logger.error("Error occurred while validating incoming request body. AuthValidator::loginValidator in authValidator.js in authValidator.js", error);
+            next(error);
+        } else {
+            logger.info("Finished validating incoming request body. AuthValidator::loginValidator in authValidator.js in authValidator.js");
+            req.validatedBody = value;
+            next();
+        }
+    }
 }
 
 export default AuthValidator;
