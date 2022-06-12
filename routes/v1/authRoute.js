@@ -3,18 +3,16 @@ import AuthMiddleware from "../../app/http/middleware";
 import AuthValidator from "../../app/http/validator/authValidator";
 
 /**
- * AuthRoute contains authentication routes
- * @returns {object} this.routes
- */
-
+* A router class that holds all routes related to authentication
+* You can instantiate your controller class in the constructor method
+* and attach it to a route path in the `routes` method.
+* @param {object} router express router object
+*/
 class AuthRoute {
-    /**
-     * You can instantiate your controller class in the constructor method
-     * and attach it to a route path in the routes method.
-     * @param {object} router express router object
-     */
     constructor(router) {
         this.router = router;
+
+        // Instantiate controllers and validator classes before attaching them to the routes
         this.authValidator = new AuthValidator();
         this.authController = new AuthController();
         this.authMiddleware = new AuthMiddleware();

@@ -1,8 +1,8 @@
 import { v4 } from "uuid";
 
 /**
-    * A utility class for generating both new and consistent random numbers
-    */
+* A utility class for generating both new and consistent random numbers
+*/
 class RandomNumberHelper {
     constructor() {
         this.consistentRandomNumber = null;

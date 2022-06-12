@@ -1,7 +1,17 @@
 /* eslint-disable class-methods-use-this */
 import Joi from "joi";
 
+/**
+* A class that holds validation logic for authentication.
+*/
 class AuthValidator {
+    /**
+    * Validator method.
+    * Uses Joi package to validate inputs.
+    * @param {object} req express request object
+    * @param {object} res express response object
+    * @param {object} next express middleware next object
+    */
     registerValidator(req, res, next) {
         logger.info("Validating incoming request body in registerValidator method of AuthValidator class in authValidator.js");
         const { body } = req;
@@ -24,6 +34,13 @@ class AuthValidator {
         }
     }
 
+    /**
+   * Validator method.
+   * Uses Joi package to validate inputs.
+   * @param {object} req express request object
+   * @param {object} res express response object
+   * @param {object} next express middleware next object
+   */
     loginValidator(req, res, next) {
         logger.info("Validating incoming request body in. AuthValidator::loginValidator in authValidator.js");
         const { body } = req;

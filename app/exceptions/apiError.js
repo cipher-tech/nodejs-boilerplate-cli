@@ -6,7 +6,7 @@ import { ValidationError } from "joi";
 
 /**
  * @description Applications Error object class
- * Used to format all error messages
+ * Used to format and return error messages
  *
  * @returns  {object} ApiError class
  */
@@ -17,6 +17,13 @@ class ApiError extends Error {
         this.code = code;
     }
 
+    /**
+     * Method to handle intentionally thrown exceptions.
+     * @param {object} err express error object
+     * @param {object} req express request object
+     * @param {object} res express response object
+     * @param {function} next express middleware next object
+     */
     appError(err, req, res, next) {
         let { code } = err;
         if (code && typeof code === "number") {
@@ -36,7 +43,7 @@ class ApiError extends Error {
                     url: req.originalUrl,
                     type: getReasonPhrase(code || 500)
                 });
-            // throw new Error(err);
+            // check if error is from JOI validator package
         } else if (err instanceof ValidationError) {
             const { details } = err;
             const status = 400;
@@ -72,7 +79,7 @@ class ApiError extends Error {
      * @param  {Function} next
      */
     genericError(err, req, res, next) {
-        const message = "Ad error occurred, we are looking into it." || getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR);
+        const message = "An error occurred, we are looking into it.";
         const status = StatusCodes.INTERNAL_SERVER_ERROR;
         const url = req.originalUrl;
 

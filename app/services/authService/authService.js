@@ -6,11 +6,25 @@ import { HashText } from "../../utils";
 import TokenService from "../tokenService";
 import UserService from "../userService";
 
+/**
+* Authentication service class
+* holds methods with logic to authenticate a user
+* @param {object} req express request object
+* @param {object} res express response object
+* @param {function} next express response object
+*
+* @returns {object} response
+*/
 class AuthService {
     constructor() {
         this.UserService = new UserService();
     }
 
+    /**
+    * Method with logic to register a user
+    * @param {object} body express request body
+    * @returns {Promise<object>} {user, token}
+    */
     registerService = async (body) => {
         const {
             password,
@@ -53,6 +67,11 @@ class AuthService {
         return { userDetails, token };
     };
 
+    /**
+    * Method with logic to log a user in
+    * @param {object} body express request body
+    * @returns {Promise<object>} {user, token}
+    */
     loginService = async (body) => {
         try {
             const { password, email } = body;

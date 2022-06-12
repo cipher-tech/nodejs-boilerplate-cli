@@ -6,10 +6,9 @@ import fileUpload from "express-fileupload";
 import cors from "cors";
 
 import loggerInit from "./logger";
-import Response from "../app/utils/responseHandler";
 import Router from "../routes";
 import config from ".";
-import RandomNumberHelper from "../app/utils/randomNumberHelper";
+import { RandomNumberHelper } from "../app/utils";
 import db from "../database";
 import ApiError from "../app/exceptions/apiError";
 

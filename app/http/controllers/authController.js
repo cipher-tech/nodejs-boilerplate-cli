@@ -1,5 +1,5 @@
 import { UserAuthenticationService } from "../../services/authService";
-import Response from "../../utils/responseHandler";
+import { ResponseHandler } from "../../utils";
 
 /**
  * User AuthController class
@@ -24,7 +24,9 @@ class AuthController {
      */
     register = async (req, res, next) => {
         const { body } = req;
-        const response = new Response(req, res);
+
+        // instantiates the response class to return formatted and consistent data
+        const response = new ResponseHandler(req, res);
 
         try {
             const userAuthService = new UserAuthenticationService();
@@ -43,9 +45,17 @@ class AuthController {
         }
     };
 
+    /**
+    * Method that handles user login
+    * @param {object} req express request object
+    * @param {object} res express response object
+    * @param {function} next express response object
+    *
+    * @returns {object} response
+    */
     login = async (req, res, next) => {
         const { body } = req;
-        const response = new Response(req, res);
+        const response = new ResponseHandler(req, res);
         try {
             logger.info("attempting to log user. :::AuthController::login in authController.js");
             const userAuthService = new UserAuthenticationService();

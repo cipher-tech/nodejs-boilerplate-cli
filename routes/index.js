@@ -4,7 +4,7 @@ import AuthRoute from "./v1/authRoute";
 
 /**
  * Main Router that contains Application routes
- * @returns {object} this.routes
+ * @returns {expressRouterObject} this.routes
  */
 
 class Router {
@@ -12,9 +12,8 @@ class Router {
         this.router = express.Router();
         this.response = null;
 
-        /*  instantiates the class where we define our authentication routes
-        *   and adds the authentication routes defined in the class to our routes
-         */
+        // instantiates the class where we define our authentication routes
+        // and adds the authentication routes defined in the class to our routes
         this.authRoute = new AuthRoute(this.router);
 
         this.indexRoute();
