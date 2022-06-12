@@ -26,12 +26,11 @@ class HashText {
             logger.info("INFO: Attempting to verify text in hashText.js");
             const hashedTest = await bcrypt.compare(text, hashedText);
 
-            console.log("::::::::::hashedTesthashedTesthashedTest:::::::::::", hashedTest);
             logger.info("INFO: Text successfully verified in hashText.js");
             return hashedTest;
         } catch (error) {
-            logger.error("ERROR: error occurred while hashing text in hashText.js", error);
-            throw new Error("An error occurred please try again or contact support.");
+            logger.error("ERROR: error occurred while verifying text in hashText.js", error);
+            throw new Error("Could not hash test.");
         }
     }
 }

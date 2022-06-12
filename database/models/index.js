@@ -15,7 +15,6 @@
 //     return (file.indexOf(".") !== 0) && (file !== basename) && (file.slice(-3) === ".js");
 //   })
 //   .forEach(file => {
-//     console.log(":::::FINE", file);
 //     const model = require(join(__dirname, file))(sequelize, DataTypes);
 //     db[model.name] = model;
 //   });

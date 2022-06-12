@@ -7,7 +7,9 @@ class UserService {
 
     async getUserByEmail(email) {
         try {
-            const user = await this.User.findOne({ where: { email } });
+            const user = await this.User.findOne({
+                where: { email }
+            });
             return user;
         } catch (error) {
             logger.error("ERROR: An error occurred while retrieving user", error);

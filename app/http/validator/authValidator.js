@@ -10,7 +10,7 @@ class AuthValidator {
             email: Joi.string().email().min(3).required(),
             age: Joi.number().integer().max(300).required(),
             password: Joi.string().min(8).required(),
-            phone_number: Joi.string().min(11).max(14),
+            phone_number: Joi.string().max(11),
             date_of_birth: Joi.date()
         });
         const { error, value } = schema.validate(body);

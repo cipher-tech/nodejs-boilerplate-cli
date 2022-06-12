@@ -47,12 +47,21 @@ class AuthController {
         const { body } = req;
         const response = new Response(req, res);
         try {
-            fdf
             logger.info("attempting to log user. :::AuthController::login in authController.js");
+            const userAuthService = new UserAuthenticationService();
+            const loginService = await userAuthService.loginService(body);
+            if (loginService) {
+                response.success({
+                    message: "Registration successful",
+                    data: loginService
+                });
+            } else {
+                throw new Error("An error occurred, we're looking into it.");
+            }
         } catch (error) {
             next(error);
         }
-    }
+    };
 }
 
 export default AuthController;

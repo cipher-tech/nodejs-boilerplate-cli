@@ -12,7 +12,6 @@ import { ValidationError } from "joi";
  */
 class ApiError extends Error {
     constructor(code, message) {
-        console.log("code, message code, message", code, message);
         super(message);
         // const stack = Error.captureStackTrace(this, this.constructor);
         this.code = code;
@@ -73,11 +72,10 @@ class ApiError extends Error {
      * @param  {Function} next
      */
     genericError(err, req, res, next) {
-        const message = getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR);
+        const message = "Ad error occurred, we are looking into it." || getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR);
         const status = StatusCodes.INTERNAL_SERVER_ERROR;
         const url = req.originalUrl;
 
-        console.log("::::::::INSTANCE::::::::33e3e3e");
         logger.error(`
         status - ${status}
         message - ${message} 
@@ -92,22 +90,8 @@ class ApiError extends Error {
                 message,
                 status,
                 url,
-                type: message
+                type: getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR)
             });
-    }
-
-    badRequest(message, url = "") {
-        this.url = url;
-        this.message = message;
-        this.type = getReasonPhrase(StatusCodes.BAD_REQUEST);
-        this.status = StatusCodes.BAD_REQUEST;
-        const error = new ApiError({
-            status: this.status,
-            message: this.message,
-            type: this.type,
-            url: this.url
-        });
-        throw error;
     }
 }
 

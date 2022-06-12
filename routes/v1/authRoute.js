@@ -33,8 +33,7 @@ class AuthRoute {
         );
         this.router.post(
             "/login",
-            this.authValidator.registerValidator,
-            this.authMiddleware.userAuth,
+            this.authValidator.loginValidator,
             this.authController.login
         );
     }
