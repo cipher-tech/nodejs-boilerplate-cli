@@ -81,7 +81,7 @@ class AuthService {
 
             logger.info(`Checking if user with email: ${email} exists. AuthService::loginService in userAuthService.js`);
 
-            const user = await this.UserService.getUserByEmail(email);
+            const user = await this.UserService.getUserByEmail(email.toLowerCase());
             if (!user) {
                 logger.info(`User with email: ${email} does not exists. AuthService::loginService in userAuthService.js`);
                 throw new ApiError(StatusCodes.BAD_REQUEST, "Invalid email or password please try again");

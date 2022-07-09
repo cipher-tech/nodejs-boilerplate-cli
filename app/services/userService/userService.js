@@ -13,6 +13,18 @@ class UserService {
     * @param {text} email email to search for in the database
     * @returns {Promise<boolean>} user model
     */
+    async getUsers() {
+        try {
+            const users = await this.User.findAll({
+                attributes: { exclude: ["password", "updated_at"] }
+            });
+            return users;
+        } catch (error) {
+            logger.error("ERROR: An error occurred while retrieving users in userService.js", error);
+            throw new Error("An error occurred. we're looking into it.");
+        }
+    }
+
     async getUserByEmail(email) {
         try {
             const user = await this.User.findOne({
@@ -20,8 +32,8 @@ class UserService {
             });
             return user;
         } catch (error) {
-            logger.error("ERROR: An error occurred while retrieving user", error);
-            throw new Error("An error occurred while. we're looking into it.");
+            logger.error("ERROR: An error occurred while retrieving user in userService.js", error);
+            throw new Error("An error occurred. we're looking into it.");
         }
     }
 
@@ -35,8 +47,8 @@ class UserService {
             const user = await this.User.findByPk(id);
             return user;
         } catch (error) {
-            logger.error("ERROR: An error occurred while retrieving user", error);
-            throw new Error("An error occurred while. we're looking into it.");
+            logger.error("ERROR: An error occurred while retrieving user in userService.js", error);
+            throw new Error("An error occurred. we're looking into it.");
         }
     }
 
@@ -50,8 +62,8 @@ class UserService {
             const newUser = await this.User.create({ ...userDetails });
             return newUser;
         } catch (error) {
-            logger.error("ERROR: An error occurred while storing user", error);
-            throw new Error("An error occurred while. we're looking into it.");
+            logger.error("ERROR: An error occurred while storing user in userService.js", error);
+            throw new Error("An error occurred. we're looking into it.");
         }
     }
 }

@@ -40,6 +40,7 @@
     "eslint-plugin-jest": "^26.1.2",
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-security": "^1.4.0",
+    "jest": "^28.1.2",
     "nodemon-webpack-plugin": "^4.7.1",
     "sequelize-cli": "^6.4.1",
     "webpack": "^5.70.0",
