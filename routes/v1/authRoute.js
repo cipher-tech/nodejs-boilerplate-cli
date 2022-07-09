@@ -16,7 +16,12 @@ class AuthRoute {
         this.authValidator = new AuthValidator();
         this.authController = new AuthController();
         this.authMiddleware = new AuthMiddleware();
+        // this.routes();
+    }
+
+    run() {
         this.routes();
+        return this.router;
     }
 
     /**

@@ -1,6 +1,7 @@
 import express from "express";
 import Response from "../app/utils/responseHandler";
 import AuthRoute from "./v1/authRoute";
+import UserRoute from "./v1/userRoute";
 
 /**
  * Main Router that contains Application routes
@@ -11,12 +12,10 @@ class Router {
     constructor() {
         this.router = express.Router();
         this.response = null;
-
         // instantiates the class where we define our authentication routes
         // and adds the authentication routes defined in the class to our routes
         this.authRoute = new AuthRoute(this.router);
-
-        this.indexRoute();
+        this.userRoute = new UserRoute(this.router);
     }
 
     indexRoute() {
@@ -30,6 +29,10 @@ class Router {
     }
 
     run() {
+        this.router.use("/auth", this.authRoute.run());
+        this.router.use("/users", this.userRoute.run());
+        this.indexRoute();
+
         return this.router;
     }
 }
