@@ -1,7 +1,7 @@
 import path from "path";
 
 import development from "./env/development";
-import test from "./env/test";
+import test from "./env/testEnv";
 import staging from "./env/staging";
 import production from "./env/production";
 
