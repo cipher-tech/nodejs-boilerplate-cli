@@ -4,7 +4,7 @@
   "description": "A simple starter project for quickly building RESTful APIs using Node.js, Express.",
   "main": "index.js",
   "scripts": {
-    "test": "jest --coverage",
+    "test": "jest --coverage --detectOpenHandles",
     "build": "webpack --watch",
     "start": "webpack --watch"
   },

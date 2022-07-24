@@ -82,7 +82,7 @@ describe("Test methods in UserService", () => {
         };
 
         const userService = new UserService();
-        const data = await userService.storeUser("9");
+        const data = await userService.storeUser(user);
         await expect(user).toEqual(data);
     });
 

@@ -40,7 +40,7 @@ class AuthService {
 
         logger.info(`Checking if user with email: ${email} exists. AuthService::registerService in userAuthService.js`);
         const oldUser = await this.UserService.getUserByEmail(email);
-        if (oldUser !== null) {
+        if (oldUser != null) {
             logger.error(`user with email: ${email} already exists. AuthService::registerService in userAuthService.js`);
             throw new ApiError(StatusCodes.CONFLICT, "User with email already exists");
         }

@@ -43,19 +43,21 @@ export default (sequelize, DataTypes) => {
                 allowNull: false
             },
             created_at: {
-                type: DataTypes.DATE
+                type: DataTypes.DATE,
+                defaultValue: new Date().toISOString()
             },
             updated_at: {
-                type: DataTypes.DATE
+                type: DataTypes.DATE,
+                defaultValue: new Date().toISOString()
             }
         },
         {
             sequelize,
             timestamps: true,
-            // I want updatedAt to actually be called updateTimestamp
+            // I want updatedAt to actually be called updated_at
             updatedAt: "updated_at",
 
-            // I want createdAt to actually be called updateTimestamp
+            // I want createdAt to actually be called created_at
             createdAt: "created_at",
             modelName: "User"
         }

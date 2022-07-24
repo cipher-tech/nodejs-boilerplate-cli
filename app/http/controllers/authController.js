@@ -1,4 +1,4 @@
-import { UserAuthenticationService } from "../../services/authService";
+import UserAuthenticationService from "../../services/authService";
 import { ResponseHandler } from "../../utils";
 
 /**

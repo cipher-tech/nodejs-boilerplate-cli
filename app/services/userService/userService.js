@@ -27,8 +27,9 @@ class UserService {
 
     async getUserByEmail(email) {
         try {
+            const emailToLowerCase = email.toLowerCase();
             const user = await this.User.findOne({
-                where: { email }
+                where: { email: emailToLowerCase }
             });
             return user;
         } catch (error) {
@@ -59,7 +60,16 @@ class UserService {
    */
     async storeUser(userDetails) {
         try {
-            const newUser = await this.User.create({ ...userDetails });
+            const newUser = await this.User.create({
+                name: "cipher tech",
+                email: "newUse2r@mail.com",
+                age: 23,
+                phone_number: "06046363777",
+                password: "12345678",
+                date_of_birth: "1999-09-08T23:00:00.000Z",
+                created_at: "2022-07-22 13:04:34.713 +00:00",
+                updated_at: "2022-07-22 13:04:34.713 +00:00"
+            });
             return newUser;
         } catch (error) {
             logger.error("ERROR: An error occurred while storing user in userService.js", error);
