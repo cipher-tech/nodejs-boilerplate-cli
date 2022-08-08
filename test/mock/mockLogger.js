@@ -7,12 +7,12 @@ import logger from "../../config/logger";
 const mockLogger = () => {
     const LoggerInit = logger("test");
     global.logger = {
-        error: jest.fn(() => LoggerInit),
-        info: jest.fn(() => LoggerInit)
+        error: jest.fn(() => LoggerInit.error),
+        info: jest.fn(() => LoggerInit.info)
     };
-    // global.console = {
-    //     log: jest.fn()
-    // };
+    global.console = {
+        log: console.log
+    };
 };
 
 export default mockLogger();

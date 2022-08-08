@@ -44,6 +44,10 @@ class UserService {
    * @returns {Promise<boolean>} user model
    */
     async getUserById(id) {
+        if (!id) {
+            logger.error("ERROR: User id cannot be empty in getUserById method of userService.js");
+            throw new Error("An error occurred. we're looking into it.");
+        }
         try {
             const user = await this.User.findByPk(id);
             return user;
@@ -59,17 +63,12 @@ class UserService {
    * @returns {Promise<boolean>} user model
    */
     async storeUser(userDetails) {
+        if (!userDetails) {
+            logger.error("ERROR: User info cannot be empty in storeUser method of userService.js");
+            throw new Error("An error occurred. we're looking into it.");
+        }
         try {
-            const newUser = await this.User.create({
-                name: "cipher tech",
-                email: "newUse2r@mail.com",
-                age: 23,
-                phone_number: "06046363777",
-                password: "12345678",
-                date_of_birth: "1999-09-08T23:00:00.000Z",
-                created_at: "2022-07-22 13:04:34.713 +00:00",
-                updated_at: "2022-07-22 13:04:34.713 +00:00"
-            });
+            const newUser = await this.User.create({ ...userDetails });
             return newUser;
         } catch (error) {
             logger.error("ERROR: An error occurred while storing user in userService.js", error);
