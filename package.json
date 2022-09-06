@@ -4,9 +4,16 @@
   "description": "A simple starter project for quickly building RESTful APIs using Node.js, Express.",
   "main": "index.js",
   "scripts": {
-    "test": "jest --coverage --detectOpenHandles",
+    "test": "jest --coverage --detectOpenHandles --silent=false",
     "build": "webpack --watch",
     "start": "webpack --watch"
+  },
+  "jest": {
+    "verbose": true,
+    "testPathIgnorePatterns": [
+      "./config/logger.js",
+      "./test/mock"
+    ]
   },
   "repository": {
     "type": "git",

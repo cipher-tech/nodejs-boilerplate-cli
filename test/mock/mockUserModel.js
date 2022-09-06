@@ -20,6 +20,7 @@ const newUser = {
     email: "newuser@mail.com",
     phone_number: "06046363777",
     age: 28,
+    password: "newpassword",
     date_of_birth: "1991-09-08",
     created_at: "2022-07-09T16:55:11.936Z"
 };
@@ -50,7 +51,11 @@ const mockDatabase = () => {
         return null;
     });
     dbUser.findByPk = jest.fn().mockImplementation(() => user);
-    dbUser.create = jest.fn().mockImplementation(() => newUser);
+    dbUser.create = jest.fn().mockImplementation(() => ({
+        dataValues: {
+            ...newUser
+        }
+    }));
 };
 
 export default mockDatabase();

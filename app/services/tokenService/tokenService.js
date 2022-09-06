@@ -28,7 +28,7 @@ class TokenService {
     async generateAuthToken(user) {
         if (!user) {
             logger.error("Error: User object required to generate token for TokenService:: generateAuthToken in tokenService.js");
-            throw new Error("We've encountered an issue. Please retry in a few minutes. If the issue persists, please contact support.");
+            throw new Error("We've encountered an issue. Please retry in a few minutes.");
         }
         try {
             const timeToLive = dayjs().add(config.JWT_TIME_TO_LIVE, "minutes");
