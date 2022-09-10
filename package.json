@@ -13,7 +13,8 @@
     "testPathIgnorePatterns": [
       "./config/logger.js",
       "./test/mock"
-    ]
+    ],
+    "clearMocks": true
   },
   "repository": {
     "type": "git",

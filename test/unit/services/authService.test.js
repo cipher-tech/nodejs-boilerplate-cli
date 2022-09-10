@@ -8,7 +8,6 @@ import HashText from "../../../app/utils/hashText";
 describe("Test token service", () => {
     let user;
     beforeEach(() => {
-        jest.resetModules();
         user = {
             password: "newpassword",
             email: "newuseruu@mail.com",
@@ -19,7 +18,7 @@ describe("Test token service", () => {
         };
     });
     afterEach(() => {
-        jest.resetModules();
+        jest.clearAllMocks();
     });
     describe("Test register service", () => {
         jest.mock("../../../app/services/userService", () => jest.fn());
@@ -82,7 +81,6 @@ describe("Test token service", () => {
         jest.mock("../../../app/services/userService", () => jest.fn());
         // jest.mock("../../../app/utils/hashText", () => jest.fn());
         beforeEach(() => {
-            jest.resetModules();
             user = {
                 password: "newpassword",
                 email: "newuseru@mail.com",
@@ -92,10 +90,10 @@ describe("Test token service", () => {
                 date_of_birth: "1999-09-08"
             };
             jest.spyOn(UserService.prototype, "getUserByEmail").mockImplementation(() => user);
-            jest.spyOn(HashText, "verifyHash").mockImplementation(() => null);
         });
         afterEach(() => {
-            jest.resetModules();
+            jest.restoreAllMocks();
+            jest.clearAllMocks();
         });
         test("Should fail to login: no email or password", async () => {
             const userToLoginNoEmail = {
@@ -133,16 +131,47 @@ describe("Test token service", () => {
             const login = await authService.loginService;
             await expect(login(userToLogin)).rejects.toThrow("Invalid email or password please try again");
         });
-        test("Should login in use successfully", async () => {
+        test("Should login in user successfully", async () => {
             const userToLogin = {
-                password: "newPass",
+                password: "12345678",
                 email: "newuser@mail.com"
             };
+            const existingUser = {
+                password: "$2b$12$LgD6TnbwvubkD3tOP.GHk.P59bRVlTQNpnd.MxOMRvdzyaPKrurLy",
+                email: "newuseruu@mail.com",
+                name: "cipher tech",
+                phone_number: "06046363777",
+                age: 28,
+                date_of_birth: "1999-09-08",
+                dataValues: {
+                    password: "$2b$12$LgD6TnbwvubkD3tOP.GHk.P59bRVlTQNpnd.MxOMRvdzyaPKrurLy",
+                    email: "newuseruu@mail.com",
+                    name: "cipher tech",
+                    phone_number: "06046363777",
+                    age: 28,
+                    date_of_birth: "1999-09-08"
+                }
+            };
+            jest.spyOn(UserService.prototype, "getUserByEmail").mockImplementation(() => existingUser);
             const authService = new AuthService();
             const login = await authService.loginService(userToLogin);
 
-            console.log(":::::::::::;(userToLogin) (userToLogin)", login);
-            await expect(login).rejects.toThrow("Invalid email or password please try again");
+            expect(login).not.toBeNull();
+            await expect(login).toStrictEqual({
+                userDetails: {
+                    email: "newuseruu@mail.com",
+                    name: "cipher tech",
+                    phone_number: "06046363777",
+                    age: 28,
+                    date_of_birth: "1999-09-08"
+                },
+                token: {
+                    access: {
+                        token: expect.any(String),
+                        expires: expect.any(Date)
+                    }
+                }
+            });
         });
     });
 });
