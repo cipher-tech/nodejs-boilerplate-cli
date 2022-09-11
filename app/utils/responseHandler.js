@@ -25,7 +25,10 @@ class Response {
      * @returns {object} - success response
      */
     success(options) {
-        if (Object.entries(options).length === 0) { return new Error("Error: Object (data) is required!"); }
+        if (!options || Object.entries(options).length === 0) {
+            logger.error("options object required in app/utils/responseHandler.js");
+            return new Error("Error: Arguments to the success response handler cannot be empty");
+        }
         const { message, data } = options;
         const currentUrl = `${this.domain}${this.request.originalUrl}`;
         const status = "success";
