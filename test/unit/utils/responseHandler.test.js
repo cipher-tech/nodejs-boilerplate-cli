@@ -3,7 +3,7 @@ import "../../../config/logger";
 import "../../mock/mockLogger";
 
 describe.only("Test response handler", () => {
-    test.only("Should fail to send success response: no agument passed", async () => {
+    test.only("Should fail to send success response: no argument passed", async () => {
         const req = {
             originalUrl: "Localhost",
             method: "POST",
