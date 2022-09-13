@@ -16,6 +16,9 @@ export default {
     plugins: [
         new NodemonPlugin() // use nodemon to watch for changes
     ],
+    node: {
+        __dirname: true
+    },
     module: {
         rules: [
             {
@@ -26,7 +29,10 @@ export default {
         ]
     },
     resolve: {
-        extensions: ["*", ".js"]
+        extensions: ["*", ".js"],
+        fallback: {
+            fs: false
+        }
     },
     output: {
         filename: "[name].js",

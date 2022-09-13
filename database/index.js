@@ -1,10 +1,19 @@
 import Sequelize from "sequelize";
 import config from "../config/index";
+import models from "./models";
 import User from "./models/user";
 
-const sequelize = new Sequelize(config.DATABASE, config.USERNAME, config.PASSWORD, {
-    host: config.HOST,
-    dialect: "postgres",
+const { DATABASE,
+    USERNAME,
+    PASSWORD,
+    HOST,
+    DATABASE_PORT,
+    DIALECT } = config;
+
+const sequelize = new Sequelize(DATABASE, USERNAME, PASSWORD, {
+    host: HOST,
+    dialect: DIALECT,
+    port: DATABASE_PORT,
     operatorsAliases: false,
 
     pool: {
@@ -15,6 +24,7 @@ const sequelize = new Sequelize(config.DATABASE, config.USERNAME, config.PASSWOR
     }
 });
 
+// console.log(":::::::::::::models models models ::::::", models);
 const database = {};
 
 database.Sequelize = Sequelize;
