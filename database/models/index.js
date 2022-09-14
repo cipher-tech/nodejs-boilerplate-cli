@@ -1,58 +1,28 @@
-// import { readdirSync } from "fs";
+import { readdirSync } from "fs";
 // import { basename as _basename, join } from "path";
 // import Sequelize, { DataTypes } from "sequelize";
 // import config from "../database";
+const makeModels = (sequelize, Sequelize) => {
+    const basename = "index.js";
+    // const env = process.env.NODE_ENV || "development";
+    const models = {};
 
-// const basename = _basename(__filename);
-// const env = process.env.NODE_ENV || "development";
-// const db = {};
+    const sequelizeModels = readdirSync(__dirname)
+        .filter((file) => (file.indexOf(".") !== 0) && (file !== basename) && (file.slice(-3) === ".js"));
+    for (let i = 0; i < sequelizeModels.length; i++) {
+        let modelName = sequelizeModels[i].slice(0, -3);
+        const { default: module } = require(`./${modelName}`);
+        const instance = module;
 
-// let sequelize;
-//   sequelize = new Sequelize(config.database, config.username, config.password, config);
-// console.log("::config::::::::::", config);
-// readdirSync(__dirname)
-//   .filter(file => {
-//     return (file.indexOf(".") !== 0) && (file !== basename) && (file.slice(-3) === ".js");
-//   })
-//   .forEach(file => {
-//     const model = require(join(__dirname, file))(sequelize, DataTypes);
-//     db[model.name] = model;
-//   });
-
-// Object.keys(db).forEach(modelName => {
-//   if (db[modelName].associate) {
-//     db[modelName].associate(db);
-//   }
-// });
-
-// db.sequelize = sequelize;
-// db.Sequelize = Sequelize;
-
-// export default db;
-
-import Sequelize from "sequelize";
-import config from "../../config/index";
-import User from "./user";
-
-const sequelize = new Sequelize(config.DATABASE, config.USERNAME, config.PASSWORD, {
-    host: config.HOST,
-    dialect: "postgres",
-    operatorsAliases: false,
-
-    pool: {
-        max: 5,
-        min: 0,
-        acquire: 3000,
-        idle: 0
+        modelName = modelName[0].toUpperCase() + modelName.substring(1);
+        models[modelName] = instance(sequelize, Sequelize);
     }
-});
+    return models;
+};
+// Object.keys(models).forEach(modelName => {
+//     if (models[modelName].associate) {
+//         models[modelName].associate(models);
+//     }
+// })
 
-const database = {};
-
-database.Sequelize = Sequelize;
-database.sequelize = sequelize;
-
-database.User = User(sequelize, Sequelize);
-// database.tutorials = require("./tutorial.model.js")(sequelize, Sequelize);
-
-export default database;
+export default makeModels;

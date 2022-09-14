@@ -1,7 +1,6 @@
 import Sequelize from "sequelize";
 import config from "../config/index";
-import models from "./models";
-import User from "./models/user";
+import makeModels from "./models";
 
 const { DATABASE,
     USERNAME,
@@ -24,13 +23,15 @@ const sequelize = new Sequelize(DATABASE, USERNAME, PASSWORD, {
     }
 });
 
-// console.log(":::::::::::::models models models ::::::", models);
-const database = {};
+const database = (DatabaseConfig, sequelizeInstance) => {
+    const model = {};
 
-database.Sequelize = Sequelize;
-database.sequelize = sequelize;
+    model.Sequelize = Sequelize;
+    model.sequelize = sequelize;
 
-database.User = User(sequelize, Sequelize);
-// database.tutorials = require("./tutorial.model.js")(sequelize, Sequelize);
+    const modelInstances = makeModels(DatabaseConfig, sequelizeInstance);
+    Object.assign(model, { ...modelInstances });
+    return model;
+};
 
-export default database;
+export default database(sequelize, Sequelize);
