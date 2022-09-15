@@ -11,6 +11,7 @@ const makeModels = (sequelize, Sequelize) => {
         .filter((file) => (file.indexOf(".") !== 0) && (file !== basename) && (file.slice(-3) === ".js"));
     for (let i = 0; i < sequelizeModels.length; i++) {
         let modelName = sequelizeModels[i].slice(0, -3);
+        // eslint-disable-next-line security/detect-non-literal-require, import/no-dynamic-require
         const { default: module } = require(`./${modelName}`);
         const instance = module;
 
