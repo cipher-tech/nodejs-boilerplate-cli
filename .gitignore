@@ -20,7 +20,6 @@ checkstyle-result.xml
 *.env
 .nyc_output/
 tmp/
-dist
 package-lock.json
 kubernetes/**/secret.yaml
 .eslintrc.json
