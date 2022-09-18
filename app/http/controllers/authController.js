@@ -57,7 +57,7 @@ class AuthController {
         const { body } = req;
         const response = new ResponseHandler(req, res);
         try {
-            logger.info("attempting to log user. :::AuthController::login in authController.js");
+            logger.info("attempting to login user. :::AuthController::login in authController.js");
             const userAuthService = new UserAuthenticationService();
             const loginService = await userAuthService.loginService(body);
             if (loginService) {
