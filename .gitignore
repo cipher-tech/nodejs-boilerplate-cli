@@ -22,7 +22,6 @@ checkstyle-result.xml
 tmp/
 package-lock.json
 kubernetes/**/secret.yaml
-.eslintrc.json
 env.rc
 .vscode
 params.rc
