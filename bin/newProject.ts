@@ -30,7 +30,6 @@ const npmInstallSpinner = ora({
 });
 class NewProject {
     async requestOptions() {
-        try {
             const options = [
                 {
                     type: 'list',
@@ -54,9 +53,6 @@ class NewProject {
 
             const response: IUserOptions = await inquirer.prompt(options)
             return response
-        } catch (error) {
-            console.log(error);
-        }
     }
 
     verifyDrivers(driver: IDriver) {
@@ -94,9 +90,11 @@ class NewProject {
             const copy = await fs.copy(path.resolve(__dirname, `./../lib/${ driver }/${ language }/${ framework }`),
                 `./${ options.name }`)
 
+            return true
+
         } catch (error) {
-            console.log(error);
-            throw new Error("There was an error while generating boilerplate")
+            console.log("There was an error while generating boilerplate");
+            throw error
         }
     }
 
@@ -104,27 +102,27 @@ class NewProject {
         npmInstallSpinner.start(chalk.cyan(`Installing dependencies packages for ${ name }`));
 
         const { default: child_process } = await import("child_process");
-        const childProcess = child_process.spawn(`cd ${name} && npm install`, {
+        const childProcess = child_process.spawn(`cd ${ name } && npm install`, {
             shell: true,
         })
 
         childProcess.on('error', () => {
             npmInstallSpinner.fail(
-              chalk.red(
-                `
+                chalk.red(
+                    `
                 An error occurred, please try again. 
                 If problem persist please raise an issue on Github`
-              )
+                )
             );
-          });
-        
-          childProcess.on('close', () => {
+        });
+
+        childProcess.on('close', () => {
             npmInstallSpinner.succeed(chalk.green(`Packages installed successfully`));
-        
+
             console.log(
-              chalk.green(`
+                chalk.green(`
               🥳🥳🥳🥳🥳
-            Voila!!! ${name} is ready for development. 
+            Voila!!! ${ name } is ready for development. 
         
             Create something Awesome
                🚀🚀🚀🚀🚀
@@ -135,7 +133,7 @@ class NewProject {
         
             `)
             );
-          });
+        });
     }
     async create(name: string) {
         try {
@@ -145,7 +143,7 @@ class NewProject {
             }
             creatingProjectSpinner.start(chalk.cyan(`Creating ${ name }`));
 
-            console.log("Generating Boilerplate ...");
+            console.log(chalk.cyan("Generating Boilerplate ..."));
             const generatedProject = await this.generateBoilerplate({ name, ...userOptions })
             console.log("Boilerplate generated successfully  ...");
             creatingProjectSpinner.succeed(chalk.green(`${ name } created successfully`));
@@ -153,7 +151,7 @@ class NewProject {
             await this.installDependencies(name)
             return userOptions;
         } catch (error) {
-            console.log(error);
+            throw error
         }
     }
 }
