@@ -1,9 +1,12 @@
 import inquirer from "inquirer";
-import fs from "fs-extra";
+import fsExtra from "fs-extra";
+import fs from "fs";
+import {promisify} from 'util'
 import ora from "ora";
+import child_process from "child_process";
 import chalk from "chalk";
 import path from "path";
-import { drivers, languages, framework } from "./constants";
+import { drivers, languages, framework, boilerplateURL, repos } from "./constants";
 
 type ILanguage = "TypeScript" | "JavaScript";
 type IDriver = "Mongoose" | "Sequelize";
@@ -30,29 +33,29 @@ const npmInstallSpinner = ora({
 });
 class NewProject {
     async requestOptions() {
-            const options = [
-                {
-                    type: 'list',
-                    name: 'language',
-                    message: 'Select a development language',
-                    choices: [ 'JavaScript', 'TypeScript' ]
-                },
-                {
-                    type: 'list',
-                    name: 'driver',
-                    message: 'Select a database driver',
-                    choices: [ 'Sequelize', 'Mongoose' ]
-                },
-                {
-                    type: 'list',
-                    name: 'framework',
-                    message: 'Select a database driver',
-                    choices: [ 'Express' ]
-                },
-            ]
+        const options = [
+            {
+                type: 'list',
+                name: 'language',
+                message: 'Select a development language',
+                choices: [ 'JavaScript', 'TypeScript' ]
+            },
+            {
+                type: 'list',
+                name: 'driver',
+                message: 'Select a database driver',
+                choices: [ 'Sequelize', 'Mongoose' ]
+            },
+            {
+                type: 'list',
+                name: 'framework',
+                message: 'Select a database driver',
+                choices: [ 'Express' ]
+            },
+        ]
 
-            const response: IUserOptions = await inquirer.prompt(options)
-            return response
+        const response: IUserOptions = await inquirer.prompt(options)
+        return response
     }
 
     verifyDrivers(driver: IDriver) {
@@ -76,19 +79,50 @@ class NewProject {
         return framework[ option ]
     }
     async generateBoilerplate(options: IGenerateBoilerplateOptions) {
+       const fsAccess =  promisify(fs.access)
+       const fsRename =  promisify(fs.rename)
+        const { name } = options
         try {
             console.log(":::::::;options options", options);
             const driver = this.verifyDrivers(options.driver)
             const language = this.verifyLanguage(options.language)
             const framework = this.verifyFramework(options.framework)
+            
+            const repoToClone = `${driver}/${language}/${framework}`
             console.log("::::::::::: verifyLanguage", {
                 driver,
                 language,
                 framework
             });
+            const cloneRepo = child_process.spawn(`git clone ${ repos[repoToClone] }`, {
+                shell: true,
+            })
 
-            const copy = await fs.copy(path.resolve(__dirname, `./../lib/${ driver }/${ language }/${ framework }`),
-                `./${ options.name }`)
+            cloneRepo.on('error', () => {
+                npmInstallSpinner.fail(
+                    chalk.red(
+                        `
+                    An error occurred, please try again. 
+                    If problem persist please raise an issue on Github ...`
+                    )
+                );
+            });
+
+            cloneRepo.on('close', async () => {
+                npmInstallSpinner.succeed(chalk.green(`Packages installed successfully`));
+
+                const hasAccess: any = await fsAccess("enyata-node-base", fs.constants.F_OK)
+                console.log(":::::::: hasAccess hasAccess", hasAccess);
+                
+                    if (!hasAccess) {
+                        await fsRename('enyata-node-base', name)
+                    } else {
+                        console.log('The file already exists');
+                    }
+                console.log(
+                    chalk.green(` Repo cloned successfully!!!... `)
+                );
+            });
 
             return true
 
@@ -100,7 +134,6 @@ class NewProject {
 
     async installDependencies(name: string) {
         npmInstallSpinner.start(chalk.cyan(`Installing dependencies packages for ${ name }`));
-
         const { default: child_process } = await import("child_process");
         const childProcess = child_process.spawn(`cd ${ name } && npm install`, {
             shell: true,
@@ -127,8 +160,8 @@ class NewProject {
             Create something Awesome
                🚀🚀🚀🚀🚀
         
-            For How to use and more info on express-api-cli
-            Visit https://github.com/tolustar/express-api-cli/ 
+            For How to use and more info on cli
+            Visit  ...userOptions
             Cheers!!!
         
             `)
