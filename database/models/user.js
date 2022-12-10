@@ -1,16 +1,17 @@
+import { Model } from "sequelize";
+
 export default (sequelize, DataTypes) => {
-    //     class User extends sequelize {
-    //         /**
-    //          * Helper method for defining associations.
-    //          * This method is not a part of Sequelize lifecycle.
-    //          * The `models/index` file will call this method automatically.
-    //          */
-    //         static associate(models) {
-    //             // define association here
-    //         }
-    //     }
-    const User = sequelize.define(
-        "user",
+        class User extends Model {
+            /**
+             * Helper method for defining associations.
+             * This method is not a part of Sequelize lifecycle.
+             * The `models/index` file will call this method automatically.
+             */
+            static associate(models) {
+                // define association here
+            }
+        }
+    User.init(
         {
             id: {
                 type: DataTypes.INTEGER,
@@ -59,7 +60,7 @@ export default (sequelize, DataTypes) => {
 
             // I want createdAt to actually be called created_at
             createdAt: "created_at",
-            modelName: "User"
+            modelName: "user"
         }
     );
     return User;
