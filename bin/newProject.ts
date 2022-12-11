@@ -103,7 +103,7 @@ class NewProject {
                     chalk.red(
                         `
                     An error occurred, please try again. 
-                    If problem persist please raise an issue on Github ...`
+                    If problem persist please raise an issue on Github https://github.com/cipher-tech/nodejs-boilerplate-cli`
                     )
                 );
             });
