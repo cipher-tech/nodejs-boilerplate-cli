@@ -1,21 +1,19 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.framework = exports.languages = exports.drivers = exports.repos = exports.boilerplateURL = void 0;
-exports.boilerplateURL = 'https://github.com/enyata/enyata-node-base.git';
-exports.repos = {
-    'sequelize/javascript/express': exports.boilerplateURL
+export const boilerplateURL = 'https://github.com/enyata/enyata-node-base.git';
+export const repos = {
+    'sequelize/javascript/express': boilerplateURL
 };
 // map drivers to file name
-exports.drivers = {
+export const drivers = {
     Sequelize: "sequelize",
     Mongoose: "mongoose",
 };
 // map languages to file name
-exports.languages = {
+export const languages = {
     JavaScript: "javascript",
     TypeScript: "typescript",
 };
-exports.framework = {
+export const framework = {
     Express: "express",
     Koa: "Koa",
 };
+//# sourceMappingURL=constants.js.map
