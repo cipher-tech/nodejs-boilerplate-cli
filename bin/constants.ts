@@ -11,7 +11,7 @@ export const repos: IRepos = {
 export const drivers = {
     Sequelize: "sequelize",
     Mongoose: "mongoose",
-}
+} 
 
 // map languages to file name
 export const languages = {

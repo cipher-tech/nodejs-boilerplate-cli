@@ -20,15 +20,15 @@ program.command('split')
         console.log(str.split(options.separator, limit));
     });
 
-program.command('create')
+program.command('create') 
     .description('Create a new project')
     .argument('<string>', 'Specify the project name')
     .action(async (name: string, options: any) => {
-        console.log("::::::; logs", { name, options });
+        console.log("::::::: logs", { name, options });
         const newProject = new NewProject();
         const response = await newProject.create(name);
         console.log("::::::: response log", response);
-        
+        return
     });
 
 program.parse();
