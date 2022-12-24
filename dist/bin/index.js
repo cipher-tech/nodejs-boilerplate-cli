@@ -33,9 +33,10 @@ program.command('create')
     .description('Create a new project')
     .argument('<string>', 'Specify the project name')
     .action((name, options) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log("::::::; logs", { name, options });
+    console.log("::::::: logs", { name, options });
     const newProject = new newProject_1.default();
     const response = yield newProject.create(name);
     console.log("::::::: response log", response);
+    return;
 }));
 program.parse();
