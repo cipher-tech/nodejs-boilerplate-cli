@@ -4,6 +4,8 @@ type IRepos = {
 
 export const boilerplateURL = 'https://github.com/enyata/enyata-node-base.git'
 
+export const cliConfigName = '.clirc.json';
+
 export const repos: IRepos = {
     'sequelize/javascript/express': boilerplateURL
 }
