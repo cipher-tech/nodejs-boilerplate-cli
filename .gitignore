@@ -20,13 +20,12 @@ checkstyle-result.xml
 *.env
 .nyc_output/
 tmp/
-dist
 package-lock.json
 kubernetes/**/secret.yaml
-.eslintrc.json
 env.rc
 .vscode
 params.rc
 app/**/*.sandbox.js
 .npmrc
 .eslintrc.js
+dist/
