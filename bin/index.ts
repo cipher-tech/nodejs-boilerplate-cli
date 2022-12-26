@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import {Command} from "commander";
+import { Command } from "commander";
 import NewProject from "./newProject";
 
 const program = new Command();
@@ -20,7 +20,7 @@ program.command('split')
         console.log(str.split(options.separator, limit));
     });
 
-program.command('create') 
+program.command('create')
     .description('Create a new project')
     .argument('<string>', 'Specify the project name')
     .action(async (name: string, options: any) => {
@@ -28,6 +28,14 @@ program.command('create')
         const newProject = new NewProject();
         const response = await newProject.create(name);
         console.log("::::::: response log", response);
+        return
+    });
+
+program.command('make')
+    .description('Generate project files')
+    .option('-m, --model', 'Generate a model file')
+    .action(async (name: string, options: any) => {
+        console.log("::::::: make", { name, options });
         return
     });
 
