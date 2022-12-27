@@ -34,7 +34,7 @@ program.command('create')
 
 program.command('make')
     .description('Generate project files')
-    .option('-m, --model', 'Generate a model file')
+    .option('-m, --model <string>', 'Generate a model file')
     .action(async (options: any) => {
         const generate = new Generate();
         console.log("::::::: make", { options });
