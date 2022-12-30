@@ -1,9 +1,7 @@
 type IRepos = {
     [ Key: string]: string
 }
-
 export const boilerplateURL = 'https://github.com/enyata/enyata-node-base.git'
-
 export const cliConfigName = '.clirc.json';
 
 export const repos: IRepos = {
@@ -24,4 +22,9 @@ export const languages = {
 export const framework = {
     Express: "express",
     Koa: "Koa",
+}
+export interface IConfigOptions {
+    driver: keyof typeof drivers,
+    language: keyof typeof languages,
+    framework: keyof typeof framework
 }
