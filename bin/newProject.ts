@@ -5,13 +5,11 @@ import { promisify } from 'util'
 import ora from "ora";
 import child_process from "child_process";
 import chalk from "chalk";
-import path from "path";
-import { drivers, languages, framework, boilerplateURL, repos } from "./constants";
+import { drivers, languages, framework, repos, IConfigOptions } from "./constants";
 
-type ILanguage = "TypeScript" | "JavaScript";
-type IDriver = "Mongoose" | "Sequelize";
-type IFramework = "Express";
-
+type ILanguage = keyof typeof languages;
+type IDriver = keyof typeof drivers;
+type IFramework = keyof typeof framework;
 
 type IUserOptions = {
     language: ILanguage,
