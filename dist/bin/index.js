@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const commander_1 = require("commander");
+const generate_1 = require("./generate");
 const newProject_1 = __importDefault(require("./newProject"));
 const program = new commander_1.Command();
 program
@@ -33,9 +34,19 @@ program.command('create')
     .description('Create a new project')
     .argument('<string>', 'Specify the project name')
     .action((name, options) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log("::::::; logs", { name, options });
+    console.log("::::::: logs", { name, options });
     const newProject = new newProject_1.default();
     const response = yield newProject.create(name);
     console.log("::::::: response log", response);
+    return;
+}));
+program.command('make')
+    .description('Generate project files')
+    .option('-m, --model <string>', 'Generate a model file')
+    .action((options) => __awaiter(void 0, void 0, void 0, function* () {
+    const generate = new generate_1.Generate();
+    console.log("::::::: make", { options });
+    generate.run(options);
+    return;
 }));
 program.parse();

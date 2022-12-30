@@ -1,7 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.framework = exports.languages = exports.drivers = exports.repos = exports.boilerplateURL = void 0;
+exports.framework = exports.languages = exports.drivers = exports.repos = exports.cliConfigName = exports.boilerplateURL = void 0;
 exports.boilerplateURL = 'https://github.com/enyata/enyata-node-base.git';
+exports.cliConfigName = '.clirc.json';
 exports.repos = {
     'sequelize/javascript/express': exports.boilerplateURL
 };
