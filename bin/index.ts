@@ -6,6 +6,7 @@ import NewProject from "./newProject";
 
 export type IGenerateCliOptions = {
     model: string
+    controller: string
 }
 const program = new Command();
 
@@ -38,6 +39,7 @@ program.command('create')
 program.command('make')
     .description('Generate project files')
     .option('-m, --model <string>', 'Generate a model file')
+    .option('-c, --controller <string>', 'Generate a controller file')
     .action(async (options: IGenerateCliOptions) => {
         const generate = new Generate();
         console.log("::::::: make", { options });
