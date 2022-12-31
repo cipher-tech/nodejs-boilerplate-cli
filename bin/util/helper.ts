@@ -40,12 +40,8 @@ export const createFile = async (fileName: string, source: string, destination: 
     const fileAccess = await fileExists(destination)
     if (fileAccess) {
         console.log(chalk.cyan(`File with name: '${ fileName }' already exists`));
-        return;
+        throw new Error(`File with name: '${ fileName }' already exists`);
     }
-    console.log({
-        source,
-        destination
-    });
-    await fsExtra.copy(path.resolve(__dirname, source), destination);
+    await fsExtra.copy(source, destination);
 }
 
