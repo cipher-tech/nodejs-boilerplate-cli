@@ -1,5 +1,5 @@
 import chalk from "chalk";
-import fsExtra from "fs-extra";
+import fs from "fs";
 import path from "path";
 
 import { IGenerateCliOptions } from ".";
@@ -20,10 +20,17 @@ export class Generate {
                 return;
             }
 
-            const source =path.resolve(__dirname, `./../../lib/${ driver }/${ language }/${ framework }/model/template.js`) ;
+            const source = path.resolve(__dirname, `./../../lib/${ driver }/${ language }/${ framework }/model/template.js`);
             const destination = `./database/models/${ model }.${ extension }`;
 
             await createFile(model, source, destination)
+
+            const generatedModelTemplate = fs.readFileSync(destination).toString();
+            
+            let updatedModelTemplate = generatedModelTemplate.replace(/user/g, model);
+
+
+            fs.writeFileSync(destination, updatedModelTemplate);
             return true
         } catch (error) {
             console.log(chalk.red(`An error occurred while generating model file.`));
@@ -34,7 +41,6 @@ export class Generate {
     async run(options: any) {
         try {
             const config = await getCliConfig();
-            console.log("::::::::: ri", config, options);
             await this.model(options, config);
 
             return;
