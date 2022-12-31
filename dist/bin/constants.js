@@ -1,4 +1,5 @@
 export const boilerplateURL = 'https://github.com/enyata/enyata-node-base.git';
+export const cliConfigName = '.clirc.json';
 export const repos = {
     'sequelize/javascript/express': boilerplateURL
 };

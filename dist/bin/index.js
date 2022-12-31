@@ -9,6 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 import { Command } from "commander";
+import { Generate } from "./generate";
 import NewProject from "./newProject";
 const program = new Command();
 program
@@ -32,6 +33,15 @@ program.command('create')
     const newProject = new NewProject();
     const response = yield newProject.create(name);
     console.log("::::::: response log", response);
+    return;
+}));
+program.command('make')
+    .description('Generate project files')
+    .option('-m, --model <string>', 'Generate a model file')
+    .action((options) => __awaiter(void 0, void 0, void 0, function* () {
+    const generate = new Generate();
+    console.log("::::::: make", { options });
+    generate.run(options);
     return;
 }));
 program.parse();
