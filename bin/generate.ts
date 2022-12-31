@@ -28,7 +28,7 @@ export class Generate {
             const generatedModelTemplate = fs.readFileSync(destination).toString();
             
             let updatedModelTemplate = generatedModelTemplate.replace(/user/g, model);
-
+            updatedModelTemplate = updatedModelTemplate.replace(/User/g, (model || "").charAt(0).toLocaleUpperCase() + (model || "").slice(1))
 
             fs.writeFileSync(destination, updatedModelTemplate);
             return true
