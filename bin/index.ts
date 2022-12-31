@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 import { Command } from "commander";
+import { Generate } from "./generate";
 import NewProject from "./newProject";
 
 const program = new Command();
@@ -33,10 +34,12 @@ program.command('create')
 
 program.command('make')
     .description('Generate project files')
-    .option('-m, --model', 'Generate a model file')
-    .action(async (name: string, options: any) => {
-        console.log("::::::: make", { name, options });
+    .option('-m, --model <string>', 'Generate a model file')
+    .action(async (options: any) => {
+        const generate = new Generate();
+        console.log("::::::: make", { options });
+        generate.run(options)
         return
-    });
+    }); 
 
 program.parse();
