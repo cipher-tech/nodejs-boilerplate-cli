@@ -18,7 +18,7 @@ export class Generate {
         }
     }
 
-    getFileSource(config, folderPath,) {
+    getFileSource(config: IConfigOptions, folderPath: string) {
         let { language, driver, framework, extension } = this.formatConfigOptions(config);
         return path.resolve(__dirname, `./../../lib/${ driver }/${ language }/${ framework }${ folderPath }`);
     }
@@ -86,7 +86,7 @@ export class Generate {
 
 
                     addedImport = true;
-                }
+                } 
                 if (item.includes('export') &&
                     done === false &&
                     addedExport === false &&
