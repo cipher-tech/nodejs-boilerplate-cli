@@ -28,4 +28,4 @@ params.rc
 app/**/*.sandbox.js
 .npmrc
 .eslintrc.js
-dist/
+dist/**
