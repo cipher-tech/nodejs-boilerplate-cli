@@ -1,10 +1,11 @@
 import chalk from "chalk";
 import fs from "fs";
 import path from "path";
+import util from "util";
 
 import { IGenerateCliOptions } from ".";
 import { IConfigOptions } from "./constants";
-import { getCliConfig, createFile, addImportToIndexFile } from "./util/helper";
+import { getCliConfig, createFile, fileExists, addImportToIndexFile, capitalize } from "./util/helper";
 
 export class Generate {
     formatConfigOptions(config: IConfigOptions) {
@@ -20,7 +21,7 @@ export class Generate {
 
     getFileSource(config: IConfigOptions, folderPath: string) {
         let { language, driver, framework, extension } = this.formatConfigOptions(config);
-        return path.resolve(__dirname, `./../../lib/${ driver }/${ language }/${ framework }${ folderPath }`);
+        return path.resolve(__dirname, `./../../lib/${ driver }/${ language }/${ framework }${ folderPath }.${extension}`);
     }
     async makeModel(options: IGenerateCliOptions, config: IConfigOptions) {
         try {
@@ -58,16 +59,16 @@ export class Generate {
             }
             console.log(chalk.green(`Creating controller ${ controller }`));
             let { extension } = this.formatConfigOptions(config);
-            const filename = controller.endsWith('Controller') ? controller : `${ controller }Controller`
+            const filename = controller.toLocaleLowerCase().endsWith('Controller') ? controller : `${ controller }Controller`
 
-            const source = this.getFileSource(config, '/controller/template.js');
+            const source = this.getFileSource(config, '/controller/template');
             const destination = `./app/http/controllers/${ filename }.${ extension }`;
 
             await createFile(filename, source, destination)
 
             const generatedModelTemplate = fs.readFileSync(destination).toString();
 
-            let updatedModelTemplate = generatedModelTemplate.replace(/AuthController/g, (filename || "").charAt(0).toLocaleUpperCase() + (filename || "").slice(1))
+            let updatedModelTemplate = generatedModelTemplate.replace(/AuthController/g, capitalize(filename.split('/').slice(-1).join()))
 
             fs.writeFileSync(destination, updatedModelTemplate);
 
@@ -85,12 +86,39 @@ export class Generate {
 
     async makeService(options: IGenerateCliOptions, config: IConfigOptions) {
         try {
+            const writeContent = util.promisify(fs.writeFile)
             const { service = null } = options
             if (!service) {
                 return;
             }
-            console.log(chalk.green(`Creating service ${ service }`));
-            
+
+            let { extension } = this.formatConfigOptions(config);
+            const filename = service.toLocaleLowerCase().endsWith('Service') ? service : `${ service }Service`
+
+            const source = this.getFileSource(config, '/service/template');
+            const destination = `./app/services/${ filename }.${ extension }`;
+            let destinationFolder: string | string[] = destination.split("/");
+            destinationFolder.pop();
+
+            destinationFolder = destinationFolder.join('/');
+            await createFile(filename, source, destination)
+
+            const generatedModelTemplate = fs.readFileSync(destination).toString();
+
+            let updatedModelTemplate = generatedModelTemplate.replace(/TemplateService/g, capitalize(filename.split('/').slice(-1).join()))
+            fs.writeFileSync(destination, updatedModelTemplate);
+
+            let indexFileLocation = `${destinationFolder}/index.${extension}`
+            // check if index file exists in folder
+            const indexFileExist = await fileExists(indexFileLocation)
+            if(!indexFileExist){
+                await new Promise((resolve, reject) => {
+                    resolve(writeContent(indexFileLocation, '// index file'))
+                })
+            }
+            addImportToIndexFile(indexFileLocation, extension, filename)
+
+            console.log(chalk.green(`Creating service ${ service }`), indexFileExist, destinationFolder );
             return true
         } catch (error) {
             console.log(chalk.red(`An error occurred while generating service file.`));
