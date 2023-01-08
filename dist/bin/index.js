@@ -43,6 +43,8 @@ program.command('create')
 program.command('make')
     .description('Generate project files')
     .option('-m, --model <string>', 'Generate a model file')
+    .option('-c, --controller <string>', 'Generate a controller file')
+    .option('-s, --service <string>', 'Generate a service file')
     .action((options) => __awaiter(void 0, void 0, void 0, function* () {
     const generate = new generate_1.Generate();
     console.log("::::::: make", { options });
