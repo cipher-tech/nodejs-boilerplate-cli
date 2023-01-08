@@ -6,6 +6,9 @@ import fs from "fs"
 
 import { cliConfigName } from "../constants";
 
+export const capitalize = (text: string) => {
+    return (text || "").charAt(0).toLocaleUpperCase() + (text || "").slice(1)
+}
 export const getCliConfig = async () => {
     try {
         // read config options from cliConfigrc.jsonfile
@@ -58,30 +61,39 @@ export const addImportToIndexFile = (destination: string, extension: string, fil
     let addedImport = false
     let addedExport = false
     let importName = fileName.split('/').slice(-1)
-    data.forEach((item, index) => {
-        if (item.includes('import') &&
-            addedImport === false &&
-            index !== 0
-        ) {
-            const newImport = `import ${ importName }Class from './${ fileName }';`;
+    if (data.length <= 1) {
+        const newImport = `import ${ importName }Class from './${ fileName }'; \n`;
+        data.push(newImport);
 
-            data.splice(index, 0, newImport);
-            addedImport = true;
-        }
-        if (item.includes('export') &&
-            done === false &&
-            addedExport === false &&
-            index !== 0
-        ) {
-            const newExport = `export const ${ importName } = ${ importName }Class;`;
-            data.splice(index, 0, newExport);
+        const newExport = `export const ${ importName } = ${ importName }Class;`;
+        data.push(newExport);
+    } else {
+        for (let i = 0; i < data.length; i++) {
+            let item = data[i];
+            if (item.includes('import') &&
+                addedImport === false &&
+                i !== 0
+            ) {
+                const newImport = `import ${ importName }Class from './${ fileName }';`;
 
-            addedExport = true;
-            done = true;
-        }
-    });
-    const addNewImport = data.join('\n');
-    fs.writeFileSync(`./app/http/controllers/index.${ extension }`, addNewImport);
+                data.splice(i, 0, newImport);
+                addedImport = true;
+            }
+            if (item.includes('export') &&
+                done === false &&
+                addedExport === false &&
+                i !== 0
+            ) {
+                const newExport = `export const ${ importName } = ${ importName }Class;`;
+                data.splice(i, 0, newExport);
+
+                addedExport = true;
+                done = true;
+            }
+        };
+    }
+
+    fs.writeFileSync(destination, data.join('\n'));
     return true
 }
 
