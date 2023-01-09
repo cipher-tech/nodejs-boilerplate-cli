@@ -62,7 +62,7 @@ export const addImportToIndexFile = (destination: string, extension: string, fil
     let addedExport = false
     let importName = fileName.split('/').slice(-1)
     if (data.length <= 1) {
-        const newImport = `import ${ importName }Class from './${ fileName }'; \n`;
+        const newImport = `import ${ importName }Class from './${ importName }'; \n`;
         data.push(newImport);
 
         const newExport = `export const ${ importName } = ${ importName }Class;`;
@@ -74,7 +74,7 @@ export const addImportToIndexFile = (destination: string, extension: string, fil
                 addedImport === false &&
                 i !== 0
             ) {
-                const newImport = `import ${ importName }Class from './${ fileName }';`;
+                const newImport = `import ${ importName }Class from './${ importName }';`;
 
                 data.splice(i, 0, newImport);
                 addedImport = true;
