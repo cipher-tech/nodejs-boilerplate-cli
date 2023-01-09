@@ -92,8 +92,12 @@ export class Generate {
                 return;
             }
 
+            console.log(chalk.green(`Creating service ${ service }`));
+
             let { extension } = this.formatConfigOptions(config);
             const filename = service.toLocaleLowerCase().endsWith('Service') ? service : `${ service }Service`
+
+            console.log(chalk.green(`Generating service template ${ service }`));
 
             const source = this.getFileSource(config, '/service/template');
             const destination = `./app/services/${ filename }.${ extension }`;
@@ -102,6 +106,8 @@ export class Generate {
 
             destinationFolder = destinationFolder.join('/');
             await createFile(filename, source, destination)
+
+            console.log(chalk.green(`Finish Generating service template ${ service }`));
 
             const generatedModelTemplate = fs.readFileSync(destination).toString();
 
@@ -118,7 +124,7 @@ export class Generate {
             }
             addImportToIndexFile(indexFileLocation, extension, filename)
 
-            console.log(chalk.green(`Creating service ${ service }`), indexFileExist, destinationFolder );
+            console.log(chalk.green(`Finish creating service ${ service }`));
             return true
         } catch (error) {
             console.log(chalk.red(`An error occurred while generating service file.`));
