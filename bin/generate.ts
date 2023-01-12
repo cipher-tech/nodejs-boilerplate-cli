@@ -106,7 +106,6 @@ export class Generate {
 
     async makeService(options: IGenerateCliOptions, config: IConfigOptions) {
         try {
-            const writeContent = util.promisify(fs.writeFile)
             const { service = null } = options
             if (!service) {
                 return;
@@ -144,6 +143,23 @@ export class Generate {
             return true
         } catch (error) {
             console.log(chalk.red(`An error occurred while generating service file.`));
+            throw error
+        }
+
+    }
+
+    async makeRoute(options: IGenerateCliOptions, config: IConfigOptions) {
+        try {
+            const { route = null } = options
+            if (!route) {
+                return;
+            }
+
+            console.log(chalk.green(`Creating route ${ route }`));
+
+            return true
+        } catch (error) {
+            console.log(chalk.red(`An error occurred while generating route file.`));
             throw error
         }
 
