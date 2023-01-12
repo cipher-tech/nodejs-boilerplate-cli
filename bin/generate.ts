@@ -21,8 +21,21 @@ export class Generate {
 
     getFileSource(config: IConfigOptions, folderPath: string) {
         let { language, driver, framework, extension } = this.formatConfigOptions(config);
-        return path.resolve(__dirname, `./../../lib/${ driver }/${ language }/${ framework }${ folderPath }.${extension}`);
+        return path.resolve(__dirname, `./../../lib/${ driver }/${ language }/${ framework }${ folderPath }.${ extension }`);
     }
+
+    createIndexFileInFolder = async (directory: string) => {
+        const writeContent = util.promisify(fs.writeFile)
+
+        const indexFileExist = await fileExists(directory)
+        if (!indexFileExist) {
+            await new Promise((resolve, reject) => {
+                resolve(writeContent(directory, '// index file'))
+            })
+        }
+        return true;
+    }
+
     async makeModel(options: IGenerateCliOptions, config: IConfigOptions) {
         try {
             const { model = null } = options
@@ -63,7 +76,11 @@ export class Generate {
 
             const source = this.getFileSource(config, '/controller/template');
             const destination = `./app/http/controllers/${ filename }.${ extension }`;
+            let destinationFolder: string | string[] = destination.split("/");
+            destinationFolder.pop();
 
+            destinationFolder = destinationFolder.join('/');
+            
             await createFile(filename, source, destination)
 
             const generatedModelTemplate = fs.readFileSync(destination).toString();
@@ -72,7 +89,10 @@ export class Generate {
 
             fs.writeFileSync(destination, updatedModelTemplate);
 
-            const indexFileLocation = `./app/http/controllers/index.${ extension }`;
+
+            const indexFileLocation = `${ destinationFolder }/index.${ extension }`;
+            // check if index file exists in folder
+            await this.createIndexFileInFolder(indexFileLocation);
             addImportToIndexFile(indexFileLocation, extension, filename)
 
             console.log(chalk.green(`Finished creating controller ${ filename }`));
@@ -114,14 +134,10 @@ export class Generate {
             let updatedModelTemplate = generatedModelTemplate.replace(/TemplateService/g, capitalize(filename.split('/').slice(-1).join()))
             fs.writeFileSync(destination, updatedModelTemplate);
 
-            let indexFileLocation = `${destinationFolder}/index.${extension}`
+            let indexFileLocation = `${ destinationFolder }/index.${ extension }`
             // check if index file exists in folder
-            const indexFileExist = await fileExists(indexFileLocation)
-            if(!indexFileExist){
-                await new Promise((resolve, reject) => {
-                    resolve(writeContent(indexFileLocation, '// index file'))
-                })
-            }
+            await this.createIndexFileInFolder(indexFileLocation);
+
             addImportToIndexFile(indexFileLocation, extension, filename)
 
             console.log(chalk.green(`Finish creating service ${ service }`));
