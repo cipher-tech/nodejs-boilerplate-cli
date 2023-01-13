@@ -43,7 +43,7 @@ program.command('make')
     .option('-m, --model <string>', 'Generate a model file')
     .option('-c, --controller <string>', 'Generate a controller file')
     .option('-s, --service <string>', 'Generate a service file')
-    .option('-r, --route <string>', 'Generate a route file')
+    .option('-r, --route <string>', 'Generate a route file') 
     .action(async (options: IGenerateCliOptions) => {
         const generate = new Generate();
         console.log("::::::: make", { options });
