@@ -6,6 +6,15 @@ import fs from "fs"
 
 import { cliConfigName } from "../constants";
 
+type IGenerateFile = {
+    destination: string,
+    source: string,
+    filename: string,
+    extension: string,
+    placeholder: string[],
+    addIndex: boolean
+}
+
 export const capitalize = (text: string) => {
     return (text || "").charAt(0).toLocaleUpperCase() + (text || "").slice(1)
 }
@@ -109,14 +118,6 @@ export const addImportToIndexFile = (destination: string, extension: string, fil
     return true
 }
 
-type IGenerateFile = {
-    destination: string,
-    source: string,
-    filename: string,
-    extension: string,
-    placeholder: string[],
-    addIndex: boolean
-}
 export const generateFile = async (options: IGenerateFile) => {
     const { destination, source, filename, placeholder, addIndex = false, extension } = options;
     // get the destination folder ./test/test.js === ./test/
@@ -146,5 +147,9 @@ export const generateFile = async (options: IGenerateFile) => {
 
     }
     return true
+}
+
+export const addRouteToIndex = async () => {
+
 }
 
