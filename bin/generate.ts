@@ -37,10 +37,10 @@ export class Generate {
             const destination = `./database/models/${ model }.${ extension }`;
 
             await generateFile({
-                destination, 
-                source, 
-                filename: model, 
-                placeholder:['User', "user"], 
+                destination,
+                source,
+                filename: model,
+                placeholder: [ 'User', "user" ],
                 extension,
                 addIndex: false
             })
@@ -63,7 +63,7 @@ export class Generate {
             let { extension } = this.formatConfigOptions(config);
             // get file name
             const filename = controller.toLocaleLowerCase().endsWith('Controller') ? controller : `${ controller }Controller`
-            
+
             // define file source path to copy template
             const source = this.getFileSource(config, '/controller/template');
             // define file destination path to copy template to
@@ -73,10 +73,10 @@ export class Generate {
             destinationFolder.pop();
 
             await generateFile({
-                destination, 
-                source, 
-                filename, 
-                placeholder:['AuthController'], 
+                destination,
+                source,
+                filename,
+                placeholder: [ 'AuthController' ],
                 extension,
                 addIndex: true
             })
@@ -110,10 +110,10 @@ export class Generate {
             destinationFolder.pop();
 
             await generateFile({
-                destination, 
-                source, 
-                filename, 
-                placeholder:['TemplateService'], 
+                destination,
+                source,
+                filename,
+                placeholder: [ 'TemplateService' ],
                 extension,
                 addIndex: true
             })
@@ -133,15 +133,33 @@ export class Generate {
             if (!route) {
                 return;
             }
-
             console.log(chalk.green(`Creating route ${ route }`));
 
+            let { extension } = this.formatConfigOptions(config);
+            const filename = route.toLocaleLowerCase().endsWith('Route') ? route : `${ route }Route`
+
+            console.log(chalk.green(`Generating route template ${ route }`));
+
+            const source = this.getFileSource(config, '/route/template');
+            const destination = `./routes/${ filename }.${ extension }`;
+            let destinationFolder: string | string[] = destination.split("/");
+            destinationFolder.pop();
+
+            await generateFile({
+                destination,
+                source,
+                filename,
+                placeholder: [ 'UserRoute' ],
+                extension,
+                addIndex: false
+            })
+
+            console.log(chalk.green(`Finish creating route ${ route }`));
             return true
         } catch (error) {
             console.log(chalk.red(`An error occurred while generating route file.`));
             throw error
         }
-
     }
     async run(options: any) {
         try {
@@ -149,6 +167,7 @@ export class Generate {
             await this.makeModel(options, config);
             await this.makeController(options, config);
             await this.makeService(options, config);
+            await this.makeRoute(options, config);
             return;
         } catch (error: any) {
             console.log(chalk.red("Error: and error occurred"));
