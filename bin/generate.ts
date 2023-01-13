@@ -33,17 +33,17 @@ export class Generate {
             console.log(chalk.green(`Creating model ${ model }`));
             let { extension } = this.formatConfigOptions(config);
 
-            const source = this.getFileSource(config, '/model/template.js');
+            const source = this.getFileSource(config, '/model/template');
             const destination = `./database/models/${ model }.${ extension }`;
 
-            await createFile(model, source, destination)
-
-            const generatedModelTemplate = fs.readFileSync(destination).toString();
-
-            let updatedModelTemplate = generatedModelTemplate.replace(/user/g, model);
-            updatedModelTemplate = updatedModelTemplate.replace(/User/g, (model || "").charAt(0).toLocaleUpperCase() + (model || "").slice(1))
-
-            fs.writeFileSync(destination, updatedModelTemplate);
+            await generateFile({
+                destination, 
+                source, 
+                filename: model, 
+                placeholder:['User', "user"], 
+                extension,
+                addIndex: false
+            })
             console.log(chalk.green(`Finished creating model ${ model }`));
             return true
         } catch (error) {
@@ -72,24 +72,14 @@ export class Generate {
             let destinationFolder: string | string[] = destination.split("/");
             destinationFolder.pop();
 
-            destinationFolder = destinationFolder.join('/');
-            
-            // copy file from source to destination
-            await createFile(filename, source, destination)
-
-            const generatedModelTemplate = fs.readFileSync(destination).toString();
-
-            // replace placeholders in generated file
-            let updatedModelTemplate = generatedModelTemplate.replace(/AuthController/g, capitalize(filename.split('/').slice(-1).join()))
-
-            fs.writeFileSync(destination, updatedModelTemplate);
-
-
-            const indexFileLocation = `${ destinationFolder }/index.${ extension }`;
-            // check if index file exists in folder
-            await createIndexFileInFolder(indexFileLocation);
-            // import file in index folder
-            addImportToIndexFile(indexFileLocation, extension, filename)
+            await generateFile({
+                destination, 
+                source, 
+                filename, 
+                placeholder:['AuthController'], 
+                extension,
+                addIndex: true
+            })
 
             console.log(chalk.green(`Finished creating controller ${ filename }`));
             return true
@@ -119,7 +109,7 @@ export class Generate {
             let destinationFolder: string | string[] = destination.split("/");
             destinationFolder.pop();
 
-            generateFile({
+            await generateFile({
                 destination, 
                 source, 
                 filename, 
@@ -127,21 +117,6 @@ export class Generate {
                 extension,
                 addIndex: true
             })
-            // destinationFolder = destinationFolder.join('/');
-            // await createFile(filename, source, destination)
-
-            // console.log(chalk.green(`Finish Generating service template ${ service }`));
-
-            // const generatedModelTemplate = fs.readFileSync(destination).toString();
-
-            // let updatedModelTemplate = generatedModelTemplate.replace(/TemplateService/g, capitalize(filename.split('/').slice(-1).join()))
-            // fs.writeFileSync(destination, updatedModelTemplate);
-
-            // let indexFileLocation = `${ destinationFolder }/index.${ extension }`
-            // // check if index file exists in folder
-            // await this.createIndexFileInFolder(indexFileLocation);
-
-            // addImportToIndexFile(indexFileLocation, extension, filename)
 
             console.log(chalk.green(`Finish creating service ${ service }`));
             return true
