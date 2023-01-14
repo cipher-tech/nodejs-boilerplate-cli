@@ -155,6 +155,37 @@ export class Generate {
             })
 
             console.log(chalk.green(`Finish creating route ${ route }`));
+
+            const data = fs.readFileSync('./routes/index.js').toString().split('\n');
+            let done = false;
+            let addedImport = false
+            let addedExport = false
+            let importName = filename.split('/').slice(-1)
+
+            for (let i = 0; i < data.length; i++) {
+                let item = data[ i ];
+                if (item.includes('import') &&
+                    addedImport === false &&
+                    i !== 0
+                ) {
+                    const newImport = `import ${ importName }Route from './${ filename }';`;
+
+                    data.splice(i, 0, newImport);
+                    addedImport = true;
+                }
+                if (item.includes('return this.router;') &&
+                    done === false &&
+                    addedExport === false &&
+                    i !== 0
+                ) {
+                    const newExport = `this.router.use("/${ importName }", new ${ importName }Route(this.router).run() )`;
+                    data.splice(i, 0, newExport);
+
+                    addedExport = true;
+                    done = true;
+                }
+            }
+            fs.writeFileSync('./routes/index.js', data.join('\n'));
             return true
         } catch (error) {
             console.log(chalk.red(`An error occurred while generating route file.`));
