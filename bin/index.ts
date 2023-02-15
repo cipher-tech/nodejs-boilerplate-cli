@@ -9,6 +9,8 @@ export type IGenerateCliOptions = {
     controller: string
     service: string
     route: string
+    resource: string
+    utility: string
 }
 const program = new Command();
 
@@ -43,12 +45,14 @@ program.command('make')
     .option('-m, --model <string>', 'Generate a model file')
     .option('-c, --controller <string>', 'Generate a controller file')
     .option('-s, --service <string>', 'Generate a service file')
-    .option('-r, --route <string>', 'Generate a route file') 
+    .option('-r, --route <string>', 'Generate a route file')
+    .option('-R, --resource <string>', 'Generate a new route, model, controller and service file in their respective directories')
+    .option('-u, --utility <string>', 'Generate a route file')
     .action(async (options: IGenerateCliOptions) => {
         const generate = new Generate();
         console.log("::::::: make", { options });
-        generate.run(options)
+        generate.run(options) 
         return
-    }); 
+    });
 
 program.parse();
