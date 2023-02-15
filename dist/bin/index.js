@@ -46,6 +46,7 @@ program.command('make')
     .option('-c, --controller <string>', 'Generate a controller file')
     .option('-s, --service <string>', 'Generate a service file')
     .option('-r, --route <string>', 'Generate a route file')
+    .option('-R, --resource <string>', 'Generate a route file')
     .action((options) => __awaiter(void 0, void 0, void 0, function* () {
     const generate = new generate_1.Generate();
     console.log("::::::: make", { options });
