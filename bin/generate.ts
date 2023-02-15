@@ -7,6 +7,12 @@ import { IGenerateCliOptions } from ".";
 import { IConfigOptions } from "./constants";
 import { getCliConfig, generateFile, addRouteToIndex } from "./util/helper";
 
+type IMakeResource =  {
+    model: string;
+    controller: string
+    service: string
+    route: string
+}
 export class Generate {
     formatConfigOptions(config: IConfigOptions) {
         let { language: lang, driver: dbDriver, framework: projectFramework } = config
@@ -24,7 +30,7 @@ export class Generate {
         return path.resolve(__dirname, `./../../lib/${ driver }/${ language }/${ framework }${ folderPath }.${ extension }`);
     }
 
-    async makeModel(options: IGenerateCliOptions, config: IConfigOptions) {
+    async makeModel(options: IGenerateCliOptions | IMakeResource, config: IConfigOptions) {
         try {
             const { model = null } = options
             if (!model) {
@@ -52,7 +58,7 @@ export class Generate {
         }
     }
 
-    async makeController(options: IGenerateCliOptions, config: IConfigOptions) {
+    async makeController(options: IGenerateCliOptions | IMakeResource, config: IConfigOptions) {
         try {
             const { controller = null } = options
             if (!controller) {
@@ -90,7 +96,7 @@ export class Generate {
 
     }
 
-    async makeService(options: IGenerateCliOptions, config: IConfigOptions) {
+    async makeService(options: IGenerateCliOptions | IMakeResource, config: IConfigOptions) {
         try {
             const { service = null } = options
             if (!service) {
@@ -127,7 +133,7 @@ export class Generate {
 
     }
 
-    async makeRoute(options: IGenerateCliOptions, config: IConfigOptions) {
+    async makeRoute(options: IGenerateCliOptions | IMakeResource, config: IConfigOptions) {
         try {
             const { route = null } = options
             if (!route) {
@@ -169,6 +175,35 @@ export class Generate {
             throw error
         }
     }
+
+    async makeResource(options: IGenerateCliOptions, config: IConfigOptions) {
+        try {
+            const { resource = null } = options
+            if (!resource) {
+                return;
+            }
+            console.log(chalk.green(`Creating service ${ resource }`));
+
+            const resourceMap = {
+                model: resource,
+                controller: resource,
+                service: resource,
+                route: resource
+            }
+
+            await this.makeModel(resourceMap, config);
+            await this.makeController(resourceMap, config);
+            await this.makeService(resourceMap, config);
+            await this.makeRoute(resourceMap, config);
+
+            console.log(chalk.green(`Finished creating service ${ resource }`));
+            return true
+        } catch (error) {
+            console.log(chalk.red(`An error occurred while generating route file.`));
+            throw error
+        }
+    }
+
     async run(options: any) {
         try {
             const config = await getCliConfig();
@@ -176,6 +211,7 @@ export class Generate {
             await this.makeController(options, config);
             await this.makeService(options, config);
             await this.makeRoute(options, config);
+            await this.makeResource(options, config)
             return;
         } catch (error: any) {
             console.log(chalk.red("Error: and error occurred"));
