@@ -132,13 +132,13 @@ export const generateFile = async (options: IGenerateFile) => {
     let generatedModelTemplate = fs.readFileSync(destination).toString();
 
     // replace placeholders in generated file
-    for(let value of placeholder){
+    for (let value of placeholder) {
         generatedModelTemplate = generatedModelTemplate.replace(new RegExp(value, 'g'), capitalize(filename.split('/').slice(-1).join()))
     }
 
     fs.writeFileSync(destination, generatedModelTemplate);
 
-    if(addIndex){
+    if (addIndex) {
         const indexFileLocation = `${ destinationFolder }/index.${ extension }`;
         // check if index file exists in folder
         await createIndexFileInFolder(indexFileLocation);
@@ -149,7 +149,37 @@ export const generateFile = async (options: IGenerateFile) => {
     return true
 }
 
-export const addRouteToIndex = async () => {
+export const addRouteToIndex = async (filename: string) => {
+    const data = fs.readFileSync('./routes/index.js').toString().split('\n');
+    let done = false;
+    let addedImport = false
+    let addedExport = false
+    let importName = filename.split('/').slice(-1)
 
+    for (let i = 0; i < data.length; i++) {
+        let item = data[ i ];
+        if (item.includes('import') &&
+            addedImport === false &&
+            i !== 0
+        ) {
+            const newImport = `import ${ importName }Route from './${ filename }';`;
+
+            data.splice(i, 0, newImport);
+            addedImport = true;
+        }
+        if (item.includes('return this.router;') &&
+            done === false &&
+            addedExport === false &&
+            i !== 0
+        ) {
+            const newExport = `this.router.use("/${ importName }", new ${ importName }Route(this.router).run() )`;
+            data.splice(i, 0, newExport);
+
+            addedExport = true;
+            done = true;
+        }
+    }
+    fs.writeFileSync('./routes/index.js', data.join('\n'));
+    return true;
 }
 
