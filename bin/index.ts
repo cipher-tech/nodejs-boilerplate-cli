@@ -49,7 +49,7 @@ program.command('make')
     .action(async (options: IGenerateCliOptions) => {
         const generate = new Generate();
         console.log("::::::: make", { options });
-        generate.run(options)
+        generate.run(options) 
         return
     });
 
