@@ -204,6 +204,43 @@ export class Generate {
         }
     }
 
+
+    async makeUtility(options: IGenerateCliOptions, config: IConfigOptions) {
+        try {
+            const { utility = null } = options
+            if (!utility) {
+                return;
+            }
+
+            console.log(chalk.green(`Creating utility ${ utility }`));
+
+            let { extension } = this.formatConfigOptions(config);
+            const filename = utility.toLocaleLowerCase().endsWith('Helper') ? utility : `${ utility }Helper`
+
+            console.log(chalk.green(`Generating utility template ${ utility }`));
+
+            const source = this.getFileSource(config, '/utils/template');
+            const destination = `./app/utils/${ filename }.${ extension }`;
+            let destinationFolder: string | string[] = destination.split("/");
+            destinationFolder.pop();
+
+            await generateFile({
+                destination,
+                source,
+                filename,
+                placeholder: [ 'Template' ],
+                extension,
+                addIndex: true
+            })
+
+            console.log(chalk.green(`Finish creating utility ${ utility }`));
+            return true
+        } catch (error) {
+            console.log(chalk.red(`An error occurred while generating utility file.`));
+            throw error
+        }
+
+    }
     async run(options: any) {
         try {
             const config = await getCliConfig();
@@ -212,6 +249,7 @@ export class Generate {
             await this.makeService(options, config);
             await this.makeRoute(options, config);
             await this.makeResource(options, config)
+            await this.makeUtility(options, config)
             return;
         } catch (error: any) {
             console.log(chalk.red("Error: and error occurred"));
