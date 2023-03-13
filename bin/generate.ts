@@ -7,7 +7,7 @@ import { IGenerateCliOptions } from ".";
 import { IConfigOptions } from "./constants";
 import { getCliConfig, generateFile, addRouteToIndex } from "./util/helper";
 
-type IMakeResource =  {
+type IMakeResource = {
     model: string;
     controller: string
     service: string
@@ -241,6 +241,41 @@ export class Generate {
         }
 
     }
+
+    async makeMiddleware(options: IGenerateCliOptions, config: IConfigOptions) {
+        try {
+            const { middleware = null } = options
+            if (!middleware) {
+                return;
+            }
+
+            console.log(chalk.green(`Creating middleware ${ middleware }`));
+            let { extension } = this.formatConfigOptions(config);
+            const filename = middleware.toLocaleLowerCase().endsWith('middleware') ? middleware : `${ middleware }Middleware`
+
+            console.log(chalk.green(`Generating middleware template ${ middleware }`));
+
+            const source = this.getFileSource(config, '/middleware/template');
+            const destination = `./app/http/middleware/${ filename }.${ extension }`;
+            let destinationFolder: string | string[] = destination.split("/");
+            destinationFolder.pop();
+
+            await generateFile({
+                destination,
+                source,
+                filename,
+                placeholder: [ 'Template' ],
+                extension,
+                addIndex: true
+            })
+
+            console.log(chalk.green(`Finish creating middleware ${ middleware }`));
+            return true
+        } catch (error) {
+            console.log(chalk.red(`An error occurred while generating middleware file.`));
+            throw error
+        }
+    }
     async run(options: any) {
         try {
             const config = await getCliConfig();
@@ -250,6 +285,7 @@ export class Generate {
             await this.makeRoute(options, config);
             await this.makeResource(options, config)
             await this.makeUtility(options, config)
+            await this.makeMiddleware(options, config)
             return;
         } catch (error: any) {
             console.log(chalk.red("Error: and error occurred"));
