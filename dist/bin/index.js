@@ -48,6 +48,7 @@ program.command('make')
     .option('-r, --route <string>', 'Generate a route file')
     .option('-R, --resource <string>', 'Generate a new route, model, controller and service file in their respective directories')
     .option('-u, --utility <string>', 'Generate a route file')
+    .option('-M, --middleware <string>', 'Generate a middleware file')
     .action((options) => __awaiter(void 0, void 0, void 0, function* () {
     const generate = new generate_1.Generate();
     console.log("::::::: make", { options });
