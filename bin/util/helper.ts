@@ -92,8 +92,9 @@ export const addImportToIndexFile = (destination: string, extension: string, fil
         for (let i = 0; i < data.length; i++) {
             let item = data[ i ];
             if (item.includes('import') &&
-                addedImport === false &&
-                i !== 0
+                addedImport === false 
+                // &&
+                // i !== 0
             ) {
                 const newImport = `import ${ importName }Class from './${ importName }';`;
 
