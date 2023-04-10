@@ -11,6 +11,7 @@
 | -u or --utility    |  Create a new utility helper file in specified directory   |            mee -u post |
 | -M or --middleware | Create a new middleware helper file in specified directory |            mee -M post |
 | -v or --validator  |   Create a new validator file in the validator directory   |            mee -v post |
+| -U or --unittest   |   Create a new unittest file in the unit test directory    |            mee -U post |
 
 -   automatically adds 'Controller' suffix
 -   no need to name controllers as plural e.g posts(instead use post)
