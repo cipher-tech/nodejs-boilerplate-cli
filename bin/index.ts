@@ -12,6 +12,7 @@ export type IGenerateCliOptions = {
     resource: string
     utility: string
     middleware: string
+    validator: string
 }
 const program = new Command();
 
@@ -50,6 +51,7 @@ program.command('make')
     .option('-R, --resource <string>', 'Generate a new route, model, controller and service file in their respective directories')
     .option('-u, --utility <string>', 'Generate a route file')
     .option('-M, --middleware <string>', 'Generate a middleware file')
+    .option('-v, --validator <string>', 'Generate a validator file')
     .action(async (options: IGenerateCliOptions) => {
         const generate = new Generate();
         console.log("::::::: make", { options });
