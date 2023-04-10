@@ -312,6 +312,41 @@ export class Generate {
         }
     }
 
+    async makeUnittest(options: IGenerateCliOptions, config: IConfigOptions) {
+        try {
+            const { unittest = null } = options
+            if (!unittest) {
+                return;
+            }
+
+            console.log(chalk.green(`Creating unittest file ${ unittest }`));
+            let { extension } = this.formatConfigOptions(config);
+            const filename = unittest.toLocaleLowerCase().endsWith('.test') ? unittest : `${ unittest }.test`
+
+            console.log(chalk.green(`Generating unit test template ${ unittest }`));
+
+            const source = this.getFileSource(config, '/test/unittest');
+            const destination = `./test/unit/${ filename }.${ extension }`;
+            let destinationFolder: string | string[] = destination.split("/");
+            destinationFolder.pop();
+
+            await generateFile({
+                destination,
+                source,
+                filename: unittest,
+                placeholder: [ 'Template' ],
+                extension,
+                addIndex: false
+            })
+
+            console.log(chalk.green(`Finish creating unit test ${ unittest }`));
+            return true
+        } catch (error) {
+            console.log(chalk.red(`An error occurred while generating unit test file.`));
+            throw error
+        }
+    }
+
     async run(options: any) {
         try {
             const config = await getCliConfig();
@@ -323,6 +358,7 @@ export class Generate {
             await this.makeUtility(options, config)
             await this.makeMiddleware(options, config)
             await this.makeValidator(options, config)
+            await this.makeUnittest(options, config)
             return;
         } catch (error: any) {
             console.log(chalk.red("Error: and error occurred"));
