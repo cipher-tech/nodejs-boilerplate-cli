@@ -10,6 +10,7 @@
 | -R or --resource   |     Create a new resource file in specified directory      |            mee -R post |
 | -u or --utility    |  Create a new utility helper file in specified directory   |            mee -u post |
 | -M or --middleware | Create a new middleware helper file in specified directory |            mee -M post |
+| -v or --validator  |   Create a new validator file in the validator directory   |            mee -v post |
 
 -   automatically adds 'Controller' suffix
 -   no need to name controllers as plural e.g posts(instead use post)
