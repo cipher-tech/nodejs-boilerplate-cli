@@ -276,6 +276,42 @@ export class Generate {
             throw error
         }
     }
+
+    async makeValidator(options: IGenerateCliOptions, config: IConfigOptions) {
+        try {
+            const { validator = null } = options
+            if (!validator) {
+                return;
+            }
+
+            console.log(chalk.green(`Creating validator file ${ validator }`));
+            let { extension } = this.formatConfigOptions(config);
+            const filename = validator.toLocaleLowerCase().endsWith('validator') ? validator : `${ validator }Validator`
+
+            console.log(chalk.green(`Generating validator template ${ validator }`));
+
+            const source = this.getFileSource(config, '/validator/template');
+            const destination = `./app/http/validator/${ filename }.${ extension }`;
+            let destinationFolder: string | string[] = destination.split("/");
+            destinationFolder.pop();
+
+            await generateFile({
+                destination,
+                source,
+                filename,
+                placeholder: [ 'Template' ],
+                extension,
+                addIndex: true
+            })
+
+            console.log(chalk.green(`Finish creating validator ${ validator }`));
+            return true
+        } catch (error) {
+            console.log(chalk.red(`An error occurred while generating validator file.`));
+            throw error
+        }
+    }
+
     async run(options: any) {
         try {
             const config = await getCliConfig();
@@ -286,6 +322,7 @@ export class Generate {
             await this.makeResource(options, config)
             await this.makeUtility(options, config)
             await this.makeMiddleware(options, config)
+            await this.makeValidator(options, config)
             return;
         } catch (error: any) {
             console.log(chalk.red("Error: and error occurred"));
