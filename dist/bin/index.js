@@ -51,6 +51,8 @@ program.command('make')
     .option('-M, --middleware <string>', 'Generate a middleware file')
     .option('-v, --validator <string>', 'Generate a validator file')
     .option('-U, --unittest <string>', 'Generate a unit test file')
+    .option('-I, --integration_test <string>', 'Generate a integration test file')
+    .option('-T, --test <string>', 'Generate a integration and unit test files')
     .action((options) => __awaiter(void 0, void 0, void 0, function* () {
     const generate = new generate_1.Generate();
     console.log("::::::: make", { options });

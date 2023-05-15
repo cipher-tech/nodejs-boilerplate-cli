@@ -14,6 +14,8 @@ export type IGenerateCliOptions = {
     middleware: string
     validator: string
     unittest: string
+    integration_test: string
+    test: string
 }
 const program = new Command();
 
@@ -54,6 +56,8 @@ program.command('make')
     .option('-M, --middleware <string>', 'Generate a middleware file')
     .option('-v, --validator <string>', 'Generate a validator file')
     .option('-U, --unittest <string>', 'Generate a unit test file')
+    .option('-I, --integration_test <string>', 'Generate a integration test file')
+    .option('-T, --test <string>', 'Generate a integration and unit test files')
     .action(async (options: IGenerateCliOptions) => {
         const generate = new Generate();
         console.log("::::::: make", { options });

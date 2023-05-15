@@ -13,6 +13,10 @@ type IMakeResource = {
     service: string
     route: string
 }
+type IMakeTest = {
+    integration_test: string;
+    unittest: string
+}
 export class Generate {
     formatConfigOptions(config: IConfigOptions) {
         let { language: lang, driver: dbDriver, framework: projectFramework } = config
@@ -312,7 +316,7 @@ export class Generate {
         }
     }
 
-    async makeUnittest(options: IGenerateCliOptions, config: IConfigOptions) {
+    async makeUnittest(options: IGenerateCliOptions | IMakeTest, config: IConfigOptions) {
         try {
             const { unittest = null } = options
             if (!unittest) {
@@ -346,6 +350,64 @@ export class Generate {
             throw error
         }
     }
+    async makeIntegrationTest(options: IGenerateCliOptions | IMakeTest, config: IConfigOptions) {
+        try {
+            const { integration_test = null } = options
+            if (!integration_test) {
+                return;
+            }
+
+            console.log(chalk.green(`Creating integration test file ${ integration_test }`));
+            let { extension } = this.formatConfigOptions(config);
+            const filename = integration_test.toLocaleLowerCase().endsWith('.test') ? integration_test : `${ integration_test }.test`
+
+            console.log(chalk.green(`Generating integration test template ${ integration_test }`));
+
+            const source = this.getFileSource(config, '/test/unittest');
+            const destination = `./test/integration/${ filename }.${ extension }`;
+            let destinationFolder: string | string[] = destination.split("/");
+            destinationFolder.pop();
+
+            await generateFile({
+                destination,
+                source,
+                filename: integration_test,
+                placeholder: [ 'Template' ],
+                extension,
+                addIndex: false
+            })
+
+            console.log(chalk.green(`Finish creating integration test ${ integration_test }`));
+            return true
+        } catch (error) {
+            console.log(chalk.red(`An error occurred while generating integration test file.`));
+            throw error
+        }
+    }
+
+    async makeTest(options: IGenerateCliOptions, config: IConfigOptions) {
+        try {
+            const { test = null } = options
+            if (!test) {
+                return;
+            }
+            console.log(chalk.green(`Creating integration and unit test files: ${ test }`));
+
+            const testMap = {
+                integration_test: test,
+                unittest: test,
+            }
+
+            await this.makeUnittest(testMap, config);
+            await this.makeIntegrationTest(testMap, config);
+
+            console.log(chalk.green(`Finished creating integration and unit test files: ${ test }`));
+            return true
+        } catch (error) {
+            console.log(chalk.red(`An error occurred while generating test file.`));
+            throw error
+        }
+    }
 
     async run(options: any) {
         try {
@@ -359,6 +421,8 @@ export class Generate {
             await this.makeMiddleware(options, config)
             await this.makeValidator(options, config)
             await this.makeUnittest(options, config)
+            await this.makeIntegrationTest(options, config)
+            await this.makeTest(options, config)
             return;
         } catch (error: any) {
             console.log(chalk.red("Error: and error occurred"));
