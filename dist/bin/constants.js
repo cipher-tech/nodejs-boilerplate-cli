@@ -1,19 +1,19 @@
-export const boilerplateURL = 'https://github.com/enyata/enyata-node-base.git';
-export const cliConfigName = '.clirc.json';
-export const repos = {
+export var boilerplateURL = 'https://github.com/enyata/enyata-node-base.git';
+export var cliConfigName = '.clirc.json';
+export var repos = {
     'sequelize/javascript/express': boilerplateURL
 };
 // map drivers to file name
-export const drivers = {
+export var drivers = {
     Sequelize: "sequelize",
     Mongoose: "mongoose",
 };
 // map languages to file name
-export const languages = {
+export var languages = {
     JavaScript: "javascript",
     TypeScript: "typescript",
 };
-export const framework = {
+export var framework = {
     Express: "express",
     Koa: "Koa",
 };
