@@ -79,14 +79,15 @@ program.command('make')
     .option('-R, --resource <string>', 'Generate a new route, model, controller and service file in their respective directories')
     .option('-u, --utility <string>', 'Generate a route file')
     .option('-M, --middleware <string>', 'Generate a middleware file')
-    .action(function (options) { return __awaiter(void 0, void 0, void 0, function () {
-    var generate;
-    return __generator(this, function (_a) {
-        generate = new Generate();
-        console.log("::::::: make", { options: options });
-        generate.run(options);
-        return [2 /*return*/];
-    });
-}); });
+    .option('-v, --validator <string>', 'Generate a validator file')
+    .option('-U, --unittest <string>', 'Generate a unit test file')
+    .option('-I, --integration_test <string>', 'Generate a integration test file')
+    .option('-T, --test <string>', 'Generate a integration and unit test files')
+    .action((options) => __awaiter(void 0, void 0, void 0, function* () {
+    const generate = new Generate();
+    console.log("::::::: make", { options });
+    generate.run(options);
+    return;
+}));
 program.parse();
 //# sourceMappingURL=index.js.map
