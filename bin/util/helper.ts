@@ -4,7 +4,7 @@ import util from "util";
 import path from "path";
 import fs from "fs"
 
-import { cliConfigName } from "../constants";
+import { cliConfigName } from "../constants.js";
 
 type IGenerateFile = {
     destination: string,

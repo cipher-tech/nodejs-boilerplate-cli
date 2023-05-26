@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 
 import { Command } from "commander";
-import { Generate } from "./generate";
-import NewProject from "./newProject";
+import { Generate } from "./generate.js";
+import NewProject from "./newProject.js";
 
 export type IGenerateCliOptions = {
     model: string

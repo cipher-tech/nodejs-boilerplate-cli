@@ -5,7 +5,7 @@ import { promisify } from 'util'
 import ora from "ora";
 import child_process from "child_process";
 import chalk from "chalk";
-import { drivers, languages, framework, repos, IConfigOptions } from "./constants";
+import { drivers, languages, framework, repos, IConfigOptions } from "./constants.js";
 
 type ILanguage = keyof typeof languages;
 type IDriver = keyof typeof drivers;

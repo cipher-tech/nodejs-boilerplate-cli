@@ -4,8 +4,8 @@ import path from "path";
 import util from "util";
 
 import { IGenerateCliOptions } from ".";
-import { IConfigOptions } from "./constants";
-import { getCliConfig, generateFile, addRouteToIndex } from "./util/helper";
+import { IConfigOptions } from "./constants.js";
+import { getCliConfig, generateFile, addRouteToIndex } from "./util/helper.js";
 
 type IMakeResource = {
     model: string;
