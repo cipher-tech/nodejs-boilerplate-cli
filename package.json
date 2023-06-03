@@ -2,7 +2,7 @@
   "name": "nodejs-boilerplate",
   "version": "1.0.0",
   "description": "A cli tool for generating boilerplates for node.js",
-  "main": "main.js",
+  "main": "./dist/bin/index.js",
   "type": "module",
   "bin": {
     "ome": "./dist/bin/index.js"
