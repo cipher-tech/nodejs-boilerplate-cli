@@ -7,7 +7,7 @@ export const cliConfigName = '.clirc.json';
 export const repos: IRepos = {
     'sequelize/javascript/express': boilerplateURL
 }
-// map drivers to file name
+// map drivers to file name 
 export const drivers = {
     Sequelize: "sequelize",
     Mongoose: "mongoose",

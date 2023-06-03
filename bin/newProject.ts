@@ -81,13 +81,12 @@ class NewProject {
         const fsRename = promisify(fs.rename)
         const { name } = options
         try {
-            console.log(":::::::;options options", options);
             const driver = this.verifyDrivers(options.driver)
             const language = this.verifyLanguage(options.language)
             const framework = this.verifyFramework(options.framework)
 
             const repoToClone = `${ driver }/${ language }/${ framework }`
-            console.log("::::::::::: verifyLanguage", {
+            console.log(chalk.cyanBright("Config options"), {
                 driver,
                 language,
                 framework
@@ -111,7 +110,6 @@ class NewProject {
                     npmInstallSpinner.succeed(chalk.green(`Packages installed successfully`));
 
                     const hasAccess: any = await fsAccess("enyata-node-base", fs.constants.F_OK)
-                    console.log(":::::::: hasAccess hasAccess", hasAccess);
 
                     if (!hasAccess) {
                         await fsRename('enyata-node-base', name)
@@ -139,18 +137,18 @@ class NewProject {
         try {
             console.log(chalk.cyan("Generating CLI config file ..."));
 
-            console.log("::::::::::;; configToString", options);
+            console.log(chalk.cyan("Cli config options"), options);
             const hasAccess: any = await fsAccess(name, fs.constants.F_OK)
             if (!hasAccess) {
                 await fsExtra.writeJSON(`./${ name }/.clirc.json`, options)
             } else {
-                console.log('The folder doesn\'t exists');
+                console.log(chalk.red('The folder doesn\'t exists'));
             }
 
             console.log(chalk.cyan("Finished generating CLI config file."));
         } catch (error) {
-            console.log(chalk.cyan("An error while generating CLI config file."));
-            console.log(error);
+            console.log(chalk.red("An error while generating CLI config file."));
+            console.error(error);
         }
 
     }
@@ -184,7 +182,7 @@ class NewProject {
                🚀🚀🚀🚀🚀
         
             For How to use and more info on cli
-            Visit  ..
+            Visit  https://github.com/cipher-tech/node_express_boilerplate
             Cheers!!!
         
             `)
