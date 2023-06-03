@@ -53,6 +53,7 @@ import ora from "ora";
 import child_process from "child_process";
 import chalk from "chalk";
 import { drivers, languages, framework, repos } from "./constants.js";
+import path from "path";
 var creatingProjectSpinner = ora({
     spinner: 'star2'
 });
@@ -116,7 +117,7 @@ var NewProject = /** @class */ (function () {
     };
     NewProject.prototype.generateBoilerplate = function (options) {
         return __awaiter(this, void 0, void 0, function () {
-            var fsAccess, fsRename, name, driver, language, framework_1, repoToClone, cloneRepo_1, error_1;
+            var fsAccess, fsRename, name, driver, language, framework_1, repoToClone, newFolderExists_1, cloneRepo_1, error_1;
             var _this = this;
             return __generator(this, function (_a) {
                 switch (_a.label) {
@@ -126,7 +127,7 @@ var NewProject = /** @class */ (function () {
                         name = options.name;
                         _a.label = 1;
                     case 1:
-                        _a.trys.push([1, 4, , 5]);
+                        _a.trys.push([1, 3, , 4]);
                         driver = this.verifyDrivers(options.driver);
                         language = this.verifyLanguage(options.language);
                         framework_1 = this.verifyFramework(options.framework);
@@ -136,53 +137,59 @@ var NewProject = /** @class */ (function () {
                             language: language,
                             framework: framework_1
                         });
-                        cloneRepo_1 = child_process.spawn("git clone ".concat(repos[repoToClone]), {
+                        newFolderExists_1 = fs.existsSync(name);
+                        if (newFolderExists_1) {
+                            console.log('The folder already exists', name);
+                            return [2 /*return*/, false];
+                        }
+                        cloneRepo_1 = child_process.spawn("cd ".concat(path.resolve(), " && git clone ").concat(repos[repoToClone]), {
                             shell: true,
                         });
-                        return [4 /*yield*/, cloneRepo_1.on('error', function () {
-                                npmInstallSpinner.fail(chalk.red("\n                    An error occurred, please try again. \n                    If problem persist please raise an issue on Github https://github.com/cipher-tech/nodejs-boilerplate-cli"));
-                            })];
-                    case 2:
-                        _a.sent();
+                        cloneRepo_1.on('error', function () {
+                            npmInstallSpinner.fail(chalk.red("\n                    An error occurred, please try again. \n                    If problem persist please raise an issue on Github https://github.com/cipher-tech/nodejs-boilerplate-cli"));
+                        });
                         return [4 /*yield*/, new Promise(function (resolve, reject) {
                                 cloneRepo_1.on('close', function () { return __awaiter(_this, void 0, void 0, function () {
-                                    var hasAccess;
+                                    var repoExists, error_2;
                                     return __generator(this, function (_a) {
                                         switch (_a.label) {
                                             case 0:
-                                                npmInstallSpinner.succeed(chalk.green("Packages installed successfully"));
-                                                return [4 /*yield*/, fsAccess("enyata-node-base", fs.constants.F_OK)];
+                                                _a.trys.push([0, 4, , 5]);
+                                                npmInstallSpinner.succeed(chalk.green(" Repo cloned successfully!!!... "));
+                                                repoExists = fs.existsSync("node_express_boilerplate");
+                                                if (!(!repoExists || !newFolderExists_1)) return [3 /*break*/, 2];
+                                                return [4 /*yield*/, fsRename('node_express_boilerplate', name)];
                                             case 1:
-                                                hasAccess = _a.sent();
-                                                if (!!hasAccess) return [3 /*break*/, 3];
-                                                return [4 /*yield*/, fsRename('enyata-node-base', name)];
-                                            case 2:
                                                 _a.sent();
-                                                return [3 /*break*/, 4];
-                                            case 3:
+                                                return [3 /*break*/, 3];
+                                            case 2:
                                                 console.log('The file already exists');
-                                                _a.label = 4;
-                                            case 4:
-                                                console.log(chalk.green(" Repo cloned successfully!!!... "));
+                                                _a.label = 3;
+                                            case 3:
                                                 resolve(true);
-                                                return [2 /*return*/];
+                                                return [3 /*break*/, 5];
+                                            case 4:
+                                                error_2 = _a.sent();
+                                                console.log("There was an error while renaming boilerplate");
+                                                throw error_2;
+                                            case 5: return [2 /*return*/];
                                         }
                                     });
                                 }); });
                             })];
-                    case 3: return [2 /*return*/, _a.sent()];
-                    case 4:
+                    case 2: return [2 /*return*/, _a.sent()];
+                    case 3:
                         error_1 = _a.sent();
                         console.log("There was an error while generating boilerplate");
                         throw error_1;
-                    case 5: return [2 /*return*/];
+                    case 4: return [2 /*return*/];
                 }
             });
         });
     };
     NewProject.prototype.addConfigFile = function (options) {
         return __awaiter(this, void 0, void 0, function () {
-            var name, fsAccess, hasAccess, error_2;
+            var name, fsAccess, hasAccess, error_3;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -208,9 +215,9 @@ var NewProject = /** @class */ (function () {
                         console.log(chalk.cyan("Finished generating CLI config file."));
                         return [3 /*break*/, 7];
                     case 6:
-                        error_2 = _a.sent();
+                        error_3 = _a.sent();
                         console.log(chalk.red("An error while generating CLI config file."));
-                        console.error(error_2);
+                        console.error(error_3);
                         return [3 /*break*/, 7];
                     case 7: return [2 /*return*/];
                 }
@@ -244,7 +251,7 @@ var NewProject = /** @class */ (function () {
     };
     NewProject.prototype.create = function (name) {
         return __awaiter(this, void 0, void 0, function () {
-            var userOptions, generatedProject, error_3;
+            var userOptions, generatedProject, error_4;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -270,8 +277,8 @@ var NewProject = /** @class */ (function () {
                         _a.sent();
                         return [2 /*return*/, userOptions];
                     case 5:
-                        error_3 = _a.sent();
-                        throw error_3;
+                        error_4 = _a.sent();
+                        throw error_4;
                     case 6: return [2 /*return*/];
                 }
             });
