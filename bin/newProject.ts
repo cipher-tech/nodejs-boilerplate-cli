@@ -6,6 +6,7 @@ import ora from "ora";
 import child_process from "child_process";
 import chalk from "chalk";
 import { drivers, languages, framework, repos, IConfigOptions } from "./constants.js";
+import path from "path";
 
 type ILanguage = keyof typeof languages;
 type IDriver = keyof typeof drivers;
@@ -91,11 +92,17 @@ class NewProject {
                 language,
                 framework
             });
-            const cloneRepo = child_process.spawn(`git clone ${ repos[ repoToClone ] }`, {
+            const newFolderExists: any = fs.existsSync(name)
+            if(newFolderExists){
+                console.log('The folder already exists', name);
+                return false
+            }
+
+            const cloneRepo = child_process.spawn(`cd ${ path.resolve() } && git clone ${ repos[ repoToClone ] }`, {
                 shell: true,
             })
 
-            await cloneRepo.on('error', () => {
+            cloneRepo.on('error', () => {
                 npmInstallSpinner.fail(
                     chalk.red(
                         `
@@ -107,20 +114,21 @@ class NewProject {
 
             return await new Promise((resolve, reject) => {
                 cloneRepo.on('close', async () => {
-                    npmInstallSpinner.succeed(chalk.green(`Packages installed successfully`));
+                    try {
+                        npmInstallSpinner.succeed(chalk.green(` Repo cloned successfully!!!... `));
 
-                    const hasAccess: any = await fsAccess("enyata-node-base", fs.constants.F_OK)
+                        const repoExists: any = fs.existsSync("node_express_boilerplate")
 
-                    if (!hasAccess) {
-                        await fsRename('enyata-node-base', name)
-                    } else {
-                        console.log('The file already exists');
+                        if (!repoExists || !newFolderExists) {
+                            await fsRename('node_express_boilerplate', name)
+                        } else {
+                            console.log('The file already exists');
+                        }
+                        resolve(true)
+                    } catch (error) {
+                        console.log("There was an error while renaming boilerplate");
+                        throw error
                     }
-                    console.log(
-                        chalk.green(` Repo cloned successfully!!!... `)
-                    );
-
-                    resolve(true)
                 });
 
             })
