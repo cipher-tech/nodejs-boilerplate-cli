@@ -83,11 +83,14 @@ program.command('make')
     .option('-U, --unittest <string>', 'Generate a unit test file')
     .option('-I, --integration_test <string>', 'Generate a integration test file')
     .option('-T, --test <string>', 'Generate a integration and unit test files')
-    .action((options) => __awaiter(void 0, void 0, void 0, function* () {
-    const generate = new Generate();
-    console.log("::::::: make", { options });
-    generate.run(options);
-    return;
-}));
+    .action(function (options) { return __awaiter(void 0, void 0, void 0, function () {
+    var generate;
+    return __generator(this, function (_a) {
+        generate = new Generate();
+        console.log("::::::: make", { options: options });
+        generate.run(options);
+        return [2 /*return*/];
+    });
+}); });
 program.parse();
 //# sourceMappingURL=index.js.map

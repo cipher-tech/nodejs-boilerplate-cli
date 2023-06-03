@@ -127,12 +127,11 @@ var NewProject = /** @class */ (function () {
                         _a.label = 1;
                     case 1:
                         _a.trys.push([1, 4, , 5]);
-                        console.log(":::::::;options options", options);
                         driver = this.verifyDrivers(options.driver);
                         language = this.verifyLanguage(options.language);
                         framework_1 = this.verifyFramework(options.framework);
                         repoToClone = "".concat(driver, "/").concat(language, "/").concat(framework_1);
-                        console.log("::::::::::: verifyLanguage", {
+                        console.log(chalk.cyanBright("Config options"), {
                             driver: driver,
                             language: language,
                             framework: framework_1
@@ -155,7 +154,6 @@ var NewProject = /** @class */ (function () {
                                                 return [4 /*yield*/, fsAccess("enyata-node-base", fs.constants.F_OK)];
                                             case 1:
                                                 hasAccess = _a.sent();
-                                                console.log(":::::::: hasAccess hasAccess", hasAccess);
                                                 if (!!hasAccess) return [3 /*break*/, 3];
                                                 return [4 /*yield*/, fsRename('enyata-node-base', name)];
                                             case 2:
@@ -194,7 +192,7 @@ var NewProject = /** @class */ (function () {
                     case 1:
                         _a.trys.push([1, 6, , 7]);
                         console.log(chalk.cyan("Generating CLI config file ..."));
-                        console.log("::::::::::;; configToString", options);
+                        console.log(chalk.cyan("Cli config options"), options);
                         return [4 /*yield*/, fsAccess(name, fs.constants.F_OK)];
                     case 2:
                         hasAccess = _a.sent();
@@ -204,15 +202,15 @@ var NewProject = /** @class */ (function () {
                         _a.sent();
                         return [3 /*break*/, 5];
                     case 4:
-                        console.log('The folder doesn\'t exists');
+                        console.log(chalk.red('The folder doesn\'t exists'));
                         _a.label = 5;
                     case 5:
                         console.log(chalk.cyan("Finished generating CLI config file."));
                         return [3 /*break*/, 7];
                     case 6:
                         error_2 = _a.sent();
-                        console.log(chalk.cyan("An error while generating CLI config file."));
-                        console.log(error_2);
+                        console.log(chalk.red("An error while generating CLI config file."));
+                        console.error(error_2);
                         return [3 /*break*/, 7];
                     case 7: return [2 /*return*/];
                 }
@@ -237,7 +235,7 @@ var NewProject = /** @class */ (function () {
                         });
                         childProcess.on('close', function () {
                             npmInstallSpinner.succeed(chalk.green("Packages installed successfully"));
-                            console.log(chalk.green("\n              \uD83E\uDD73\uD83E\uDD73\uD83E\uDD73\uD83E\uDD73\uD83E\uDD73\n            Voila!!! ".concat(name, " is ready for development. \n        \n            Create something Awesome\n               \uD83D\uDE80\uD83D\uDE80\uD83D\uDE80\uD83D\uDE80\uD83D\uDE80\n        \n            For How to use and more info on cli\n            Visit  ..\n            Cheers!!!\n        \n            ")));
+                            console.log(chalk.green("\n              \uD83E\uDD73\uD83E\uDD73\uD83E\uDD73\uD83E\uDD73\uD83E\uDD73\n            Voila!!! ".concat(name, " is ready for development. \n        \n            Create something Awesome\n               \uD83D\uDE80\uD83D\uDE80\uD83D\uDE80\uD83D\uDE80\uD83D\uDE80\n        \n            For How to use and more info on cli\n            Visit  https://github.com/cipher-tech/node_express_boilerplate\n            Cheers!!!\n        \n            ")));
                         });
                         return [2 /*return*/];
                 }

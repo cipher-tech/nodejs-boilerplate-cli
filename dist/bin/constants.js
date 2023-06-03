@@ -1,9 +1,9 @@
-export var boilerplateURL = 'https://github.com/enyata/enyata-node-base.git';
+export var boilerplateURL = 'https://github.com/cipher-tech/node_express_boilerplate.git';
 export var cliConfigName = '.clirc.json';
 export var repos = {
     'sequelize/javascript/express': boilerplateURL
 };
-// map drivers to file name
+// map drivers to file name 
 export var drivers = {
     Sequelize: "sequelize",
     Mongoose: "mongoose",
