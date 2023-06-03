@@ -1,7 +1,7 @@
 type IRepos = {
     [ Key: string]: string
 }
-export const boilerplateURL = 'https://github.com/enyata/enyata-node-base.git'
+export const boilerplateURL = 'https://github.com/cipher-tech/node_express_boilerplate.git'
 export const cliConfigName = '.clirc.json';
 
 export const repos: IRepos = {
