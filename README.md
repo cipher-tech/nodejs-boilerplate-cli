@@ -1,3 +1,5 @@
+A CLI tool to generate a very fast production ready NodeJs application in no time.
+
 ## Commands
 
 | Commands            |                        Description                         |                Example |
