@@ -1,7 +1,7 @@
 {
   "name": "nodejs-boilerplate",
   "version": "1.0.0",
-  "description": "A cli tool for generating boilerplates for node.js",
+  "description": "A cli tool for generating boilerplates for node.js fast",
   "main": "./dist/bin/index.js",
   "type": "module",
   "bin": {
